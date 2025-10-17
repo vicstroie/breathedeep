@@ -15,13 +15,23 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if(Input.GetKey(KeyCode.W))
+        {
+            
+        }
+
+        */
+
+        //moveSpeed = MicrophoneInput.MicLoudness * maxMoveSpeed;
+
+        if (MicrophoneInput.MicLoudness > 0.5f)
         {
             moveSpeed = maxMoveSpeed;
         }
 
         if (moveSpeed > 0)
-        { 
+        {
             moveSpeed -= 2 * Time.deltaTime;
         }
 
@@ -29,6 +39,9 @@ public class PlayerMovement : MonoBehaviour
         {
             moveSpeed = 0;
         }
+
+
+        
 
         controller.Move(transform.forward * moveSpeed * Time.deltaTime);
 
