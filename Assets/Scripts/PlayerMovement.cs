@@ -5,16 +5,26 @@ public class PlayerMovement : MonoBehaviour
     [Header("Attributes")]
     [SerializeField] float maxMoveSpeed;
     [SerializeField] float correctionSpeed;
+    [SerializeField] float checkDistance;
+    [SerializeField] LayerMask groundMask;
     
     CharacterController controller;
 
     [HideInInspector] public float moveSpeed;
     [HideInInspector] public Vector3 playerStopPosition;
 
+    [SerializeField] GameObject visionDebugger;
+
+    float stepCounter;
+    bool isMoving;
+    bool canMove;
+    bool isSearching;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        isSearching = true;
     }
 
     // Update is called once per frame
@@ -22,9 +32,9 @@ public class PlayerMovement : MonoBehaviour
     {
         //moveSpeed = MicrophoneInput.MicLoudness * maxMoveSpeed;
 
-        if(Input.GetKey(KeyCode.W))
+        if(Input.GetKeyDown(KeyCode.W))
         {
-            moveSpeed = maxMoveSpeed;
+            stepCounter = 3;
         }
 
         if (MicrophoneInput.MicLoudness > 0.5f)
@@ -44,8 +54,35 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        controller.Move(transform.forward * moveSpeed * Time.deltaTime);
 
+        if (isMoving)
+        {
+            if(this.transform.position != playerStopPosition)
+            {
+                this.transform.position = Vector3.MoveTowards(this.transform.position, playerStopPosition, correctionSpeed * Time.deltaTime);
+            } else
+            {
+                isMoving = false;
+                isSearching = true;
+            }
+        }
+
+        
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            transform.Rotate(0, 90, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            transform.Rotate(0, -90, 0);
+        }
+
+
+
+        //controller.Move(transform.forward * moveSpeed * Time.deltaTime);
+
+        /*
         if (moveSpeed < 2)
         {
             if (transform.position != playerStopPosition)
@@ -66,5 +103,53 @@ public class PlayerMovement : MonoBehaviour
 
 
         }
+        */
+    }
+
+    private void FixedUpdate()
+    {
+
+        if (isSearching)
+        {
+            Vector3 raycastOrigin = this.transform.position + (transform.forward * checkDistance);
+            visionDebugger.transform.position = raycastOrigin;
+
+            RaycastHit hit;
+            if (Physics.Raycast(raycastOrigin, Vector3.down, out hit))
+            {
+                if (hit.transform.gameObject.GetComponent<GridSpace>() != null)
+                {
+                    Debug.Log("found grid");
+
+                    if (stepCounter > 0)
+                    {
+                        stepCounter--;
+
+                        playerStopPosition = hit.transform.gameObject.GetComponent<GridSpace>().playerStopPosition;
+                        if(hit.transform.gameObject.GetComponent<GridSpace>().isTurn && stepCounter != 0)
+                        {
+                            Debug.Log("THIS IS A TURN");
+                            stepCounter = 0;
+                            Debug.Log(stepCounter);
+                            
+                        }
+
+                        isSearching = false;
+                        isMoving = true;
+                    }
+
+
+                }
+            } else
+            {
+
+                stepCounter = 0;
+
+                Debug.Log("end piece");
+
+            }
+        }
+
+        
     }
 }

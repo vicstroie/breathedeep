@@ -3,15 +3,16 @@ using UnityEngine;
 public class GridSpace : MonoBehaviour
 {
 
-    [SerializeField] bool isTurn;
-    Vector3 playerStopPosition;
+    public bool isTurn;
+    public Vector3 playerStopPosition;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerStopPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        playerStopPosition = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
     }
 
+    /*
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.GetComponent<PlayerMovement>())
@@ -20,4 +21,5 @@ public class GridSpace : MonoBehaviour
             if (isTurn) other.gameObject.GetComponent<PlayerMovement>().moveSpeed = 0;
         }
     }
+    */
 }
