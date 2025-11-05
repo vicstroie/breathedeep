@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System.IO.Ports;
+using TMPro;
 
 public class BreathReader : MonoBehaviour
 {
@@ -14,9 +15,8 @@ public class BreathReader : MonoBehaviour
     float adcMin = 10000;
     float adcMax = 0;
 
-    [Header("Arduino")]
-    [SerializeField] public string portName = "COM3";
-    [SerializeField] public int baudRate = 9600;
+    [SerializeField] TMP_Text adcText;
+    [SerializeField] TMP_Text avgText;
 
     [Space(10)]
     [SerializeField] KeyCode startSampleKey = KeyCode.Space;
@@ -29,6 +29,7 @@ public class BreathReader : MonoBehaviour
     [SerializeField] int sampleFrames = 15;
 
     Queue<float> adcAverage = new Queue<float>();
+    Queue<float> samples = new Queue<float>();
     float lastSample;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -62,9 +63,14 @@ public class BreathReader : MonoBehaviour
 
             float total = 0;
             foreach (float val in adcAverage) { total += val; }
-            float currentSample = total / adcAverage.Count;
+            float currentSample = Mathf.Floor(total / adcAverage.Count);
 
-            lastSample = currentSample;
+            if (samples.Count > sampleFrames) { samples.Dequeue(); }
+            samples.Enqueue(sensorADC);
+            //lastSample = currentSample;
+
+            adcText.text = "ADC: " + sensorADC.ToString();
+            avgText.text = "ADC Avg: " + currentSample.ToString();
         }
 
         
