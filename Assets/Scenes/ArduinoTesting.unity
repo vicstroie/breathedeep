@@ -148,12 +148,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f94f729f2b4ca84b8eae565bdf1dd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  portName: COM9
+  baudRate: 9600
+  startSampleKey: 32
   onBreatheIn:
     m_PersistentCalls:
       m_Calls: []
   onBreatheOut:
     m_PersistentCalls:
       m_Calls: []
+  sampleFrames: 15
 --- !u!4 &128005964
 Transform:
   m_ObjectHideFlags: 0
@@ -411,9 +415,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc5f48af2cffd747a079fe8c632e2c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portName: COM3
+  portName: COM9
   baudRate: 9600
-  messageListener: {fileID: 0}
+  messageListener: {fileID: 128005962}
   reconnectionDelay: 1000
   maxUnreadMessages: 1
 --- !u!4 &1483759868
