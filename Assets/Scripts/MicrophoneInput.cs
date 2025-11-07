@@ -50,7 +50,7 @@ public class MicrophoneInput : MonoBehaviour
         // pass the value to a static var so we can access it from anywhere
         MicLoudness = LevelMax();
 
-        Debug.Log(MicLoudness);
+        //Debug.Log(MicLoudness);
     }
 
     bool _isInitialized;

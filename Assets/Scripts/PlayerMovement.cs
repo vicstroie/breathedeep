@@ -117,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(raycastOrigin, Vector3.down, out hit))
             {
+
                 if (hit.transform.gameObject.GetComponent<GridSpace>() != null)
                 {
                     Debug.Log("found grid");
