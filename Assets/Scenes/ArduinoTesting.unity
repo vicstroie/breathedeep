@@ -236,6 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f94f729f2b4ca84b8eae565bdf1dd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 1
   adcText: {fileID: 1357045961}
   avgText: {fileID: 492533570}
   minMaxText: {fileID: 1639921719}
@@ -260,7 +261,8 @@ MonoBehaviour:
   onBreatheOut:
     m_PersistentCalls:
       m_Calls: []
-  sampleFrames: 60
+  sampleFrames: 15
+  sensThreshold: 5
 --- !u!4 &128005964
 Transform:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ public class BreathReader : MonoBehaviour
     float adcMin = 10000;
     float adcMax = 0;
 
+    [SerializeField] bool debug = false;
     [SerializeField] TMP_Text adcText;
     [SerializeField] TMP_Text avgText;
     [SerializeField] TMP_Text minMaxText;
@@ -38,12 +39,13 @@ public class BreathReader : MonoBehaviour
 
     Queue<float> adcAverage = new Queue<float>(); // holds the values from the last 60 frames (or whatever the value of sampleFrames is) to average it
     Queue<float> samples = new Queue<float>();
-    float lastSample;
+    float currentSample;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        red = bg.color;
+        if (debug) { red = bg.color; }
     }
 
     // Update is called once per frame
@@ -57,11 +59,11 @@ public class BreathReader : MonoBehaviour
         {
             calibrating = !calibrating;
 
-            calibratingText.SetActive(calibrating);
+            if (debug) { calibratingText.SetActive(calibrating); }
 
             if (!calibrating)
             {
-                minMaxText.text = "Min, Max: " + adcMin.ToString() + ", " + adcMax.ToString();
+                if (debug) { minMaxText.text = "Min, Max: " + adcMin.ToString() + ", " + adcMax.ToString(); }
                 calibrated = true;
             }
         }
@@ -70,12 +72,16 @@ public class BreathReader : MonoBehaviour
         {
             if (sensorADC > adcMax) { adcMax = sensorADC; }
             if (sensorADC <adcMin) { adcMin = sensorADC; }
+
         }
 
-        adcText.text = "ADC: " + sensorADC.ToString();   
+        if (debug) { adcText.text = "ADC: " + sensorADC.ToString(); }
 
-        if (breatheIn) { bg.color = Color.green; }
-        else { bg.color = red; }
+        if (debug)
+        {
+            if (breatheIn) { bg.color = Color.green; }
+            else { bg.color = red; }
+        }
     }
 
     public void OnMessageArrived(string msg)
@@ -89,7 +95,7 @@ public class BreathReader : MonoBehaviour
 
             float total = 0;
             foreach (float val in adcAverage) { total += val; }
-            float currentSample = Mathf.Floor(total / adcAverage.Count);
+            currentSample = Mathf.Floor(total / adcAverage.Count);
 
             if (samples.Count > sampleFrames) { samples.Dequeue(); }
             samples.Enqueue(currentSample);
@@ -110,10 +116,9 @@ public class BreathReader : MonoBehaviour
                 }
             }
 
-            lastSample = currentSample;
             //Debug.Log(currentSample + ", " + samples.Peek().ToString());
 
-            avgText.text = "ADC Avg: " + currentSample.ToString();
+            if (debug) { avgText.text = "ADC Avg: " + currentSample.ToString(); }
         }
 
         lastReading = sensorADC;
