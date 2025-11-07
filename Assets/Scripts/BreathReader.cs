@@ -34,8 +34,9 @@ public class BreathReader : MonoBehaviour
     [SerializeField] UnityEvent onBreatheOut;
 
     [SerializeField] int sampleFrames = 15;
+    [SerializeField] float sensThreshold = 5f; // should calibrate at start by having them stand still/hold their breath
 
-    Queue<float> adcAverage = new Queue<float>();
+    Queue<float> adcAverage = new Queue<float>(); // holds the values from the last 60 frames (or whatever the value of sampleFrames is) to average it
     Queue<float> samples = new Queue<float>();
     float lastSample;
 
@@ -93,10 +94,24 @@ public class BreathReader : MonoBehaviour
             if (samples.Count > sampleFrames) { samples.Dequeue(); }
             samples.Enqueue(currentSample);
 
-            breatheIn = currentSample > lastSample;
+            // so it only procs once
+            if (!breatheIn)
+            {
+                if (currentSample > samples.Peek() && currentSample-samples.Peek() >= sensThreshold) 
+                { 
+                    breatheIn = true; onBreatheIn.Invoke(); 
+                }
+            } 
+            else
+            {
+                if (currentSample < samples.Peek() && samples.Peek()-currentSample >= sensThreshold) 
+                { 
+                    breatheIn = false; onBreatheOut.Invoke(); 
+                }
+            }
+
             lastSample = currentSample;
-            breatheIn = sensorADC > samples.Peek();
-            Debug.Log(currentSample + ", " + samples.Peek().ToString());
+            //Debug.Log(currentSample + ", " + samples.Peek().ToString());
 
             avgText.text = "ADC Avg: " + currentSample.ToString();
         }
