@@ -26,10 +26,10 @@ public class BreathReader : MonoBehaviour
     Color red;
 
     [Space(10)]
-    [SerializeField] KeyCode startSampleKey = KeyCode.Space;
+    [SerializeField] KeyCode calibrateKey = KeyCode.Space;
     bool sampling = true;
     bool calibrating = false;
-    bool calibrated = false;
+    bool calibrated = true;
 
     [SerializeField] UnityEvent onBreatheIn;
     [SerializeField] UnityEvent onBreatheOut;
@@ -55,18 +55,18 @@ public class BreathReader : MonoBehaviour
         //Debug.Log(FindFirstObjectByType<SerialController>().ReadSerialMessage());
 
 
-        if (Input.GetKeyDown(startSampleKey))
-        {
-            calibrating = !calibrating;
+        //if (Input.GetKeyDown(calibrateKey))
+        //{
+        //    calibrating = !calibrating;
 
-            if (debug) { calibratingText.SetActive(calibrating); }
+        //    if (debug) { calibratingText.SetActive(calibrating); }
 
-            if (!calibrating)
-            {
-                if (debug) { minMaxText.text = "Min, Max: " + adcMin.ToString() + ", " + adcMax.ToString(); }
-                calibrated = true;
-            }
-        }
+        //    if (!calibrating)
+        //    {
+        //        if (debug) { minMaxText.text = "Min, Max: " + adcMin.ToString() + ", " + adcMax.ToString(); }
+        //        calibrated = true;
+        //    }
+        //}
 
         if (calibrating)
         {
