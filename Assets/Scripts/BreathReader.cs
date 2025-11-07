@@ -105,14 +105,17 @@ public class BreathReader : MonoBehaviour
             {
                 if (currentSample > samples.Peek() && currentSample-samples.Peek() >= sensThreshold) 
                 { 
-                    breatheIn = true; onBreatheIn.Invoke(); 
+                    breatheIn = true; 
+                    onBreatheIn.Invoke();
+                    Debug.Log("breathe in");
                 }
             } 
             else
             {
                 if (currentSample < samples.Peek() && samples.Peek()-currentSample >= sensThreshold) 
                 { 
-                    breatheIn = false; onBreatheOut.Invoke(); 
+                    breatheIn = false; onBreatheOut.Invoke();
+                    Debug.Log("breathe out");
                 }
             }
 
