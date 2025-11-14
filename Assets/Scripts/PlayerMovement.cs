@@ -7,6 +7,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float correctionSpeed;
     [SerializeField] float checkDistance;
     [SerializeField] LayerMask groundMask;
+    [SerializeField] float turnSpeed = 5f;
+    [Tooltip("How long to wait before starting to turn again after hitting a 90 degree increment")]
+    [SerializeField] float turnBufferTime = 0.5f;
+    [SerializeField] float[] turnIncrements; // rotation value is weird in Unity and it doesn't really wrap to 360, it goes to 180 and -180 on the other side
     
     CharacterController controller;
 
@@ -14,6 +18,11 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public Vector3 playerStopPosition;
 
     [SerializeField] GameObject visionDebugger;
+
+    int turnIndex = 0;
+    float nextTurnTarget = 90; // stores the next increment of 90
+    float currentRot = 0; // rotation direction works weird via script, so basically tracking an internal rotation
+    float currentTurn = 0; // goes up to 90 then resets
 
     float stepCounter;
     bool isMoving;
@@ -31,6 +40,32 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PedalInput.LeftDown || PedalInput.RightDown)
+        {
+            if (!turning)
+            {
+                turning = true;
+                if (transform.eulerAngles.y % 90 == 0) // only if already on a perfect increment
+                {
+                    nextTurnTarget = currentRot + 90 * PedalInput.InputValue;
+                    currentTurn = 0;
+                }
+            }
+            if (currentTurn + turnSpeed * Time.deltaTime >= 90) 
+            {
+                currentRot = nextTurnTarget;
+                transform.eulerAngles = new Vector3(0, currentRot, 0);
+                return; 
+            }
+            currentRot += turnSpeed * Time.deltaTime * PedalInput.InputValue;
+            currentTurn += turnSpeed * Time.deltaTime;
+            transform.eulerAngles = new Vector3(0, currentRot, 0);
+        }
+        else
+        {
+            turning = false;
+        }
+
         //moveSpeed = MicrophoneInput.MicLoudness * maxMoveSpeed;
 
         if(Input.GetKeyDown(KeyCode.W))
@@ -114,7 +149,7 @@ public class PlayerMovement : MonoBehaviour
         if (isSearching)
         {
             Vector3 raycastOrigin = this.transform.position + (transform.forward * checkDistance);
-            //visionDebugger.transform.position = raycastOrigin;
+            if (visionDebugger != null) { visionDebugger.transform.position = raycastOrigin; }
 
             RaycastHit hit;
             if (Physics.Raycast(raycastOrigin, Vector3.down, out hit))

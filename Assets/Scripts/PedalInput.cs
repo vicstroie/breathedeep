@@ -22,6 +22,8 @@ public class PedalInput : MonoBehaviour
     //public static PedalInput instance;
 
     public static float InputValue { get { return inputValue; } }
+    public static bool LeftDown { get { return leftDown; } }
+    public static bool RightDown { get { return rightDown; } }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
