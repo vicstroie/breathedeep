@@ -2917,7 +2917,7 @@ MonoBehaviour:
   minMaxText: {fileID: 0}
   calibratingText: {fileID: 0}
   bg: {fileID: 0}
-  startSampleKey: 32
+  calibrateKey: 32
   onBreatheIn:
     m_PersistentCalls:
       m_Calls:
