@@ -859,6 +859,7 @@ GameObject:
   - component: {fileID: 1782451076}
   - component: {fileID: 1782451075}
   - component: {fileID: 1782451078}
+  - component: {fileID: 1782451080}
   - component: {fileID: 1782451074}
   - component: {fileID: 1782451079}
   m_Layer: 0
@@ -971,9 +972,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8056d58ca08d26a489060503ce390e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stoppingDistance: 0
+  idleTime: 5
   target: {fileID: 83566650}
   usingWaypoints: 0
   waypoints: []
+  waypointRadius: 20
 --- !u!195 &1782451079
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -996,6 +1000,28 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1782451080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782451073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8995af21e0044b94c9ba6122332fb2a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 6
+  angle: 109
+  playerRef: {fileID: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 8
+  obstructionMask:
+    serializedVersion: 2
+    m_Bits: 64
+  canSeePlayer: 0
 --- !u!1001 &1922202074
 PrefabInstance:
   m_ObjectHideFlags: 0
