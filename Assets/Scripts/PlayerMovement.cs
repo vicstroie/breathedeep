@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     bool isMoving;
     bool canMove;
     bool isSearching;
+    bool turning;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -67,7 +68,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        
+
+        #region TURNING   
 
         if (Input.GetKeyDown(KeyCode.D))
         {
@@ -77,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.Rotate(0, -90, 0);
         }
-
+        #endregion
 
 
         //controller.Move(transform.forward * moveSpeed * Time.deltaTime);
@@ -112,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
         if (isSearching)
         {
             Vector3 raycastOrigin = this.transform.position + (transform.forward * checkDistance);
-            visionDebugger.transform.position = raycastOrigin;
+            //visionDebugger.transform.position = raycastOrigin;
 
             RaycastHit hit;
             if (Physics.Raycast(raycastOrigin, Vector3.down, out hit))
@@ -159,4 +161,9 @@ public class PlayerMovement : MonoBehaviour
         stepCounter = 3;
     }
 
+    // used by Unity Events on PedalInput
+    public void Turn(float dir)
+    {
+        transform.Rotate(0, 90 * dir, 0);
+    }
 }
