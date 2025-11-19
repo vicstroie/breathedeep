@@ -17,11 +17,13 @@ public class BreathReader : MonoBehaviour
     float adcMin = 10000;
     float adcMax = 0;
 
+    [Header("Debug")]
     [SerializeField] bool debug = false;
     [SerializeField] TMP_Text adcText;
     [SerializeField] TMP_Text avgText;
     [SerializeField] TMP_Text minMaxText;
     [SerializeField] GameObject calibratingText;
+    [SerializeField] TMP_Text inValueText;
     [SerializeField] Image bg;
     Color red;
 
@@ -34,6 +36,9 @@ public class BreathReader : MonoBehaviour
     [SerializeField] UnityEvent onBreatheIn;
     [SerializeField] UnityEvent onBreatheOut;
 
+    [Tooltip("How many frames one sample (average) is")]
+    [SerializeField] int sampleLength = 15;
+    [Tooltip("How many samples at a time to store")]
     [SerializeField] int sampleFrames = 15;
     [SerializeField] float sensThreshold = 5f; // should calibrate at start by having them stand still/hold their breath
 
@@ -90,12 +95,13 @@ public class BreathReader : MonoBehaviour
 
         if (calibrated)
         {
-            if (adcAverage.Count >= sampleFrames) { adcAverage.Dequeue(); }
+            if (adcAverage.Count >= sampleLength) { adcAverage.Dequeue(); }
             adcAverage.Enqueue(sensorADC);
 
             float total = 0;
             foreach (float val in adcAverage) { total += val; }
             currentSample = Mathf.Floor(total / adcAverage.Count);
+            //currentSample = sensorADC;
 
             if (samples.Count > sampleFrames) { samples.Dequeue(); }
             samples.Enqueue(currentSample);
@@ -105,6 +111,7 @@ public class BreathReader : MonoBehaviour
             {
                 if (currentSample > samples.Peek() && currentSample-samples.Peek() >= sensThreshold) 
                 { 
+                    if (debug) { inValueText.text = "In value: " + currentSample.ToString(); }
                     breatheIn = true; 
                     onBreatheIn.Invoke();
                     Debug.Log("breathe in");
