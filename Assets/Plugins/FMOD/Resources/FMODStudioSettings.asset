@@ -453,8 +453,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: 
-  sourceBankPath: 
+  sourceProjectPath: Assets/Sounds/BreatheDeepFMOD/BreatheDeepFMOD.fspro
+  sourceBankPath: Assets/Sounds/BreatheDeepFMOD/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
@@ -476,7 +476,8 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks: []
+  MasterBanks:
+  - Master
   Banks: []
   BanksToLoad: []
   LiveUpdatePort: 9264
@@ -490,21 +491,21 @@ MonoBehaviour:
   SharedLibraryUpdateStage: 0
   SharedLibraryTimeSinceStart: 0
   CurrentVersion: 131856
-  HideSetupWizard: 0
+  HideSetupWizard: 1
   LastEventReferenceScanVersion: 131856
   Platforms:
-  - {fileID: 3392794043204424348}
-  - {fileID: -972039918299324825}
-  - {fileID: 4849963506207784530}
-  - {fileID: -5429975463639942066}
-  - {fileID: -8087048308576533676}
-  - {fileID: 8074770302055151274}
-  - {fileID: -1627159642602115713}
-  - {fileID: -4865602084746548964}
-  - {fileID: 5645323813894323370}
-  - {fileID: 1818044890421525950}
-  - {fileID: 4843374348576149902}
   - {fileID: -7803183820835979270}
+  - {fileID: 4843374348576149902}
+  - {fileID: 1818044890421525950}
+  - {fileID: 5645323813894323370}
+  - {fileID: -4865602084746548964}
+  - {fileID: -1627159642602115713}
+  - {fileID: 8074770302055151274}
+  - {fileID: -8087048308576533676}
+  - {fileID: -5429975463639942066}
+  - {fileID: 4849963506207784530}
+  - {fileID: -972039918299324825}
+  - {fileID: 3392794043204424348}
   MigratedPlatforms: 09000000080000000b0000000a00000012000000060000000c0000000500000000000000150000000200000001000000
 --- !u!114 &1818044890421525950
 MonoBehaviour:
@@ -722,16 +723,16 @@ MonoBehaviour:
     HasValue: 0
   displaySortOrder: 0
   childIdentifiers:
-  - 52eb9df5db46521439908db3a29a1bbb
-  - 2c5177b11d81d824dbb064f9ac8527da
-  - 0f8eb3f400726694eb47beb1a9f94ce8
-  - b7716510a1f36934c87976f3a81dbf3d
-  - e7a046c753c3c3d4aacc91f6597f310d
-  - c88d16e5272a4e241b0ef0ac2e53b73d
-  - 2fea114e74ecf3c4f920e1d5cc1c4c40
-  - fd7c55dab0fce234b8c25f6ffca523c1
-  - de700ef3f37a49b58a57ae3addf01ad9
   - 46fbfdf3fc43db0458918377fd40293e
+  - de700ef3f37a49b58a57ae3addf01ad9
+  - fd7c55dab0fce234b8c25f6ffca523c1
+  - 2fea114e74ecf3c4f920e1d5cc1c4c40
+  - c88d16e5272a4e241b0ef0ac2e53b73d
+  - e7a046c753c3c3d4aacc91f6597f310d
+  - b7716510a1f36934c87976f3a81dbf3d
+  - 0f8eb3f400726694eb47beb1a9f94ce8
+  - 2c5177b11d81d824dbb064f9ac8527da
+  - 52eb9df5db46521439908db3a29a1bbb
   codecChannels:
     Value: []
     HasValue: 0

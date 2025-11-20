@@ -60,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
             if(this.transform.position != playerStopPosition)
             {
                 this.transform.position = Vector3.MoveTowards(this.transform.position, playerStopPosition, correctionSpeed * Time.deltaTime);
+                //AudioManager.instance.PlayFootsteps();
+
             } else
             {
                 isMoving = false;
