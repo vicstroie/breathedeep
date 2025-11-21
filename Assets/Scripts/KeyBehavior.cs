@@ -10,6 +10,10 @@ public class KeyBehavior : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] GameObject enemyPrefab;
 
+    [Header("Cameras")]
+    [SerializeField] GameObject keyCamera;
+    [SerializeField] GameObject doorCamera;
+
     [Header("Other")]
     [SerializeField] LockedDoor lockedDoor;
 
@@ -33,6 +37,9 @@ public class KeyBehavior : MonoBehaviour
             newEnemy.GetComponent<EnemyBehavior>().SetCenterPoint(centerPoint, waypointRadius);
 
             lockedDoor.isUnlocked = true;
+
+            keyCamera.SetActive(false);
+            doorCamera.SetActive(true);
 
             AudioManager.instance.PlayKeyPickup();
             Destroy(this.gameObject);
