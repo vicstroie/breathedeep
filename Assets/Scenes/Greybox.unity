@@ -7842,55 +7842,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684729004}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &686876163
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 686876165}
-  - component: {fileID: 686876164}
-  m_Layer: 0
-  m_Name: Serial Controller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &686876164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 686876163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bc5f48af2cffd747a079fe8c632e2c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  portName: COM9
-  baudRate: 9600
-  messageListener: {fileID: 0}
-  reconnectionDelay: 1000
-  maxUnreadMessages: 1
---- !u!4 &686876165
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 686876163}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -58.12203, y: -28.087292, z: 8.902841}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1784036308}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &694453558
 GameObject:
   m_ObjectHideFlags: 0
@@ -13620,6 +13571,10 @@ PrefabInstance:
       propertyPath: portName
       value: COM9
       objectReference: {fileID: 0}
+    - target: {fileID: 4780714396393264601, guid: b40a14421e9ed00428330ebf3bac25f0, type: 3}
+      propertyPath: messageListener
+      value: 
+      objectReference: {fileID: 2039401869}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14960,6 +14915,10 @@ PrefabInstance:
       value: Breath Reader
       objectReference: {fileID: 0}
     - target: {fileID: 7475672297309481875, guid: d66f08b1bea66304fa9f2bd82e46dc86, type: 3}
+      propertyPath: debug
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7475672297309481875, guid: d66f08b1bea66304fa9f2bd82e46dc86, type: 3}
       propertyPath: sensThreshold
       value: 15
       objectReference: {fileID: 0}
@@ -15136,6 +15095,88 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4847009122569073307, guid: f90f512e53fb7a54b98408500ee4013b, type: 3}
   m_PrefabInstance: {fileID: 1424195308}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1437809098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1437809100}
+  - component: {fileID: 1437809099}
+  m_Layer: 0
+  m_Name: Pedal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1437809099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437809098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52fae5521e25bc14ca34ada355cd4414, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftKey: 107
+  rightKey: 108
+  onLeftDown:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 79060218352598297}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: Turn
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: -1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onLeft:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 79060218352598297}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: Turn
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onRightDown:
+    m_PersistentCalls:
+      m_Calls: []
+  onRight:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &1437809100
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437809098}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1441009139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18786,8 +18827,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1481635955}
-  - {fileID: 1788543030}
-  - {fileID: 686876165}
   - {fileID: 545622806}
   - {fileID: 564441252}
   - {fileID: 2113284785}
@@ -18867,79 +18906,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5264073674925910954, guid: 062ba0102fdca0744a7cddd8eb6b5e1d, type: 3}
   m_PrefabInstance: {fileID: 1787201711}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1788543028
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1788543030}
-  - component: {fileID: 1788543029}
-  m_Layer: 0
-  m_Name: Breath Reader
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1788543029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788543028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f94f729f2b4ca84b8eae565bdf1dd5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debug: 1
-  adcText: {fileID: 0}
-  avgText: {fileID: 0}
-  minMaxText: {fileID: 0}
-  calibratingText: {fileID: 0}
-  inValueText: {fileID: 0}
-  bg: {fileID: 0}
-  calibrateKey: 32
-  onBreatheIn:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 79060218352598297}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: MovePlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onBreatheOut:
-    m_PersistentCalls:
-      m_Calls: []
-  sampleLength: 15
-  sampleFrames: 15
-  sensThreshold: 5
---- !u!4 &1788543030
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1788543028}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -58.12203, y: -28.087292, z: 8.902841}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1784036308}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1805781663
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21460,6 +21426,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2027329906}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2039401869 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5801723864570242136, guid: d66f08b1bea66304fa9f2bd82e46dc86, type: 3}
+  m_PrefabInstance: {fileID: 1407176364}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2049777193
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22937,6 +22908,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5320609769103479042, guid: e0ac550adfefbe44488b90941569c979, type: 3}
+      propertyPath: turnSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5320609769103479042, guid: e0ac550adfefbe44488b90941569c979, type: 3}
       propertyPath: visionDebugger
       value: 
       objectReference: {fileID: 1565119128}
@@ -23243,6 +23218,7 @@ SceneRoots:
   - {fileID: 2018985875}
   - {fileID: 2021676304}
   - {fileID: 353873279}
+  - {fileID: 1437809100}
   - {fileID: 5172370768096901575}
   - {fileID: 1407176364}
   - {fileID: 1304950596}
