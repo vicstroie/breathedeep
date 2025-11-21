@@ -183,4 +183,10 @@ public class EnemyBehavior : MonoBehaviour
         result = Vector3.zero;
         return false;
     }
+
+    public void SetCenterPoint(Transform centerPoint, float range)
+    {
+        this.centerPoint = centerPoint;
+        waypointRadius = range;
+    }
 }
