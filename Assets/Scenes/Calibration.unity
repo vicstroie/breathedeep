@@ -284,9 +284,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b06c2e22f247e9746861f003dbfb3245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleRange: 920
-  idleLower: 820
-  idleUpper: 1020
+  idleRange: 900
+  idleLower: 800
+  idleUpper: 1000
   slider: {fileID: 357511107}
   sliderBound: 630
   test: 850
@@ -1845,6 +1845,10 @@ PrefabInstance:
     - target: {fileID: 3890201067804502113, guid: b40a14421e9ed00428330ebf3bac25f0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4780714396393264601, guid: b40a14421e9ed00428330ebf3bac25f0, type: 3}
+      propertyPath: portName
+      value: COM9
       objectReference: {fileID: 0}
     - target: {fileID: 4780714396393264601, guid: b40a14421e9ed00428330ebf3bac25f0, type: 3}
       propertyPath: messageListener

@@ -63,6 +63,10 @@ public class BreathReader : MonoBehaviour
         //sensorADC = FindFirstObjectByType<SerialReader>().GetValue();
         //Debug.Log(FindFirstObjectByType<SerialController>().ReadSerialMessage());
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            lastBreath = 0;
+        }
 
         //if (Input.GetKeyDown(calibrateKey))
         //{
