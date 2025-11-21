@@ -189,4 +189,12 @@ public class EnemyBehavior : MonoBehaviour
         this.centerPoint = centerPoint;
         waypointRadius = range;
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Player is DEAD");
+        }
+    }
 }
