@@ -60,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
             if(this.transform.position != playerStopPosition)
             {
                 this.transform.position = Vector3.MoveTowards(this.transform.position, playerStopPosition, correctionSpeed * Time.deltaTime);
+                
+
             } else
             {
                 isMoving = false;
@@ -125,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
                     if (stepCounter > 0)
                     {
                         stepCounter--;
+                        AudioManager.instance.PlayFootsteps();
 
                         playerStopPosition = hit.transform.gameObject.GetComponent<GridSpace>().playerStopPosition;
                         if(hit.transform.gameObject.GetComponent<GridSpace>().isTurn && stepCounter != 0)
