@@ -139,7 +139,7 @@ public class BreathReader : MonoBehaviour
                     breatheIn = true;
                     lastBreath = currentSample;
                     onBreatheIn.Invoke();
-                    //Debug.Log("breathe in");
+                    Debug.Log("breathe in");
                 }
             }
             else
