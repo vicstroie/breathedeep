@@ -15,10 +15,10 @@ MonoBehaviour:
   Path: Assets/Sounds/BreatheDeepFMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638993257341843717
+  lastModified: 638993324050927328
   FileSizes:
   - Name: Desktop
-    Value: 1554432
+    Value: 1608512
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -38,18 +38,27 @@ MonoBehaviour:
   EditorEvents:
   - {fileID: 3370367385313210416}
   - {fileID: 949726898702672498}
+  - {fileID: 3935883649657406205}
+  - {fileID: 2232702981053433865}
+  - {fileID: 1680327244437399427}
   EditorParameters: []
   MasterBanks:
   - {fileID: -7426396059342447758}
   StringsBanks:
   - {fileID: 3734121213632852919}
   cacheVersion: 131856
-  cacheTime: 638993257341848833
+  cacheTime: 638993324050967542
   SerializableEventsDict:
   - key: event:/Ambience
     index: 0
   - key: event:/Player Walk
     index: 1
+  - key: event:/Key Pickup
+    index: 2
+  - key: event:/Monster Ambience
+    index: 3
+  - key: event:/Monster Spawn
+    index: 4
 --- !u!114 &949726898702672498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,6 +86,60 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 500
+--- !u!114 &1680327244437399427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monster Spawn
+  m_EditorClassIdentifier: 
+  Path: event:/Monster Spawn
+  Guid:
+    Data1: -494106581
+    Data2: 1155002952
+    Data3: -632909382
+    Data4: -20972890
+  Banks:
+  - {fileID: -7426396059342447758}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2500
+--- !u!114 &2232702981053433865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monster Ambience
+  m_EditorClassIdentifier: 
+  Path: event:/Monster Ambience
+  Guid:
+    Data1: -1279542136
+    Data2: 1225723114
+    Data3: -782544458
+    Data4: 400163703
+  Banks:
+  - {fileID: -7426396059342447758}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2500
 --- !u!114 &3370367385313210416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,8 +182,35 @@ MonoBehaviour:
   Path: Assets/Sounds/BreatheDeepFMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638993257341848833
+  lastModified: 638993324050967542
   FileSizes:
   - Name: Desktop
-    Value: 824
+    Value: 960
   Exists: 1
+--- !u!114 &3935883649657406205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Key Pickup
+  m_EditorClassIdentifier: 
+  Path: event:/Key Pickup
+  Guid:
+    Data1: 734822008
+    Data2: 1133417960
+    Data3: -1082168903
+    Data4: 1330438506
+  Banks:
+  - {fileID: -7426396059342447758}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1874

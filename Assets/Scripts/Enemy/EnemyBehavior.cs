@@ -43,6 +43,8 @@ public class EnemyBehavior : MonoBehaviour
         centerPoint = this.transform;
 
         SetUpNextState(STATE.Idle);
+
+        AudioManager.instance.PlayMonsterSpawn();
     }
 
     // Update is called once per frame

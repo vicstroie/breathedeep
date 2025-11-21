@@ -34,6 +34,7 @@ public class KeyBehavior : MonoBehaviour
 
             lockedDoor.isUnlocked = true;
 
+            AudioManager.instance.PlayKeyPickup();
             Destroy(this.gameObject);
         }
     }

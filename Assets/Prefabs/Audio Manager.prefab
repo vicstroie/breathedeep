@@ -58,3 +58,24 @@ MonoBehaviour:
       Data3: 938744484
       Data4: 870645804
     Path: event:/Ambience
+  keyPickup:
+    Guid:
+      Data1: 734822008
+      Data2: 1133417960
+      Data3: -1082168903
+      Data4: 1330438506
+    Path: event:/Key Pickup
+  monsterSpawn:
+    Guid:
+      Data1: -494106581
+      Data2: 1155002952
+      Data3: -632909382
+      Data4: -20972890
+    Path: event:/Monster Spawn
+  monsterAmbience:
+    Guid:
+      Data1: -1279542136
+      Data2: 1225723114
+      Data3: -782544458
+      Data4: 400163703
+    Path: event:/Monster Ambience
