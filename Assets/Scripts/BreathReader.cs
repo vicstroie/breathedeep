@@ -48,6 +48,7 @@ public class BreathReader : MonoBehaviour
     float currentSample;
     float lastBreath; // the value of the sample at the last breathe in
 
+    public float CurrentADC { get { return sensorADC; } }
     public float CurrentSample { get { return currentSample; } }
     public Queue<float> StoredSamples { get { return samples; } }
 
@@ -66,6 +67,7 @@ public class BreathReader : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             lastBreath = 0;
+            breatheIn = false;
         }
 
         //if (Input.GetKeyDown(calibrateKey))
@@ -85,7 +87,6 @@ public class BreathReader : MonoBehaviour
         {
             if (sensorADC > adcMax) { adcMax = sensorADC; }
             if (sensorADC < adcMin) { adcMin = sensorADC; }
-
         }
 
         if (debug) { adcText.text = "ADC: " + sensorADC.ToString(); }
@@ -139,7 +140,7 @@ public class BreathReader : MonoBehaviour
                     breatheIn = true;
                     lastBreath = currentSample;
                     onBreatheIn.Invoke();
-                    Debug.Log("breathe in");
+                    //Debug.Log("breathe in");
                 }
             }
             else
