@@ -22,6 +22,9 @@ public class EnemyBehavior : MonoBehaviour
     int currentWaypoint;
     [SerializeField] float waypointRadius;
 
+    [Header("Visual Feedback")]
+    [SerializeField] float minimumFogDistance;
+
 
     //Components
     NavMeshAgent agent;
@@ -39,6 +42,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         fieldOfView = GetComponent<EnemyFieldOfView>();
+        player = GameObject.FindGameObjectWithTag("Player");
 
         centerPoint = this.transform;
 
@@ -50,6 +54,22 @@ public class EnemyBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        float fogDelta = 0;
+        float playerDistance = Vector3.Distance(this.transform.position, player.transform.position);
+
+        Debug.Log(playerDistance);
+
+        if (playerDistance < minimumFogDistance)
+        { 
+            fogDelta = (1 / playerDistance) + 0.4f;
+        } else
+        {
+            fogDelta = 0.2f;
+        }
+
+        if (RenderSettings.fogDensity != fogDelta) RenderSettings.fogDensity = Mathf.MoveTowards(RenderSettings.fogDensity, fogDelta, 2 * Time.deltaTime);
+
         switch (currentState)
         {
             case STATE.Idle:
