@@ -15,7 +15,7 @@ MonoBehaviour:
   Path: Assets/Sounds/BreatheDeepFMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638993458853740095
+  lastModified: 639001438964223429
   FileSizes:
   - Name: Desktop
     Value: 1608512
@@ -47,7 +47,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: 3734121213632852919}
   cacheVersion: 131856
-  cacheTime: 638993458853740095
+  cacheTime: 639001438964233404
   SerializableEventsDict:
   - key: event:/Ambience
     index: 0
@@ -182,7 +182,7 @@ MonoBehaviour:
   Path: Assets/Sounds/BreatheDeepFMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638993458853740095
+  lastModified: 639001438964233404
   FileSizes:
   - Name: Desktop
     Value: 960
