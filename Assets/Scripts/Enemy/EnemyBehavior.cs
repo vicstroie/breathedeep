@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -149,7 +150,9 @@ public class EnemyBehavior : MonoBehaviour
 
                 if(agent.remainingDistance < agent.stoppingDistance && !agent.pathPending)
                 {
-                    currentState = STATE.Idle;
+                    //currentState = STATE.Idle;
+                    Debug.Log("You lost");
+                    SceneManager.LoadScene("Death");
                 }
 
                 break;

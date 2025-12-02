@@ -6,8 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TestScenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Greybox.unity
+    guid: 09b825695f6a22d429557dcf91c7ecbd
+  - enabled: 1
+    path: Assets/Scenes/Death.unity
+    guid: d91b03da4c4f8eb4e93ad403a467c38e
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: 249f07a633d6c114a9ff2023edd0797a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

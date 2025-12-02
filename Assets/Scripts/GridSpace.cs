@@ -9,7 +9,7 @@ public class GridSpace : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerStopPosition = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
+        playerStopPosition = new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z);
     }
 
     /*
