@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,11 +10,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask groundMask;
     
     CharacterController controller;
-
     [HideInInspector] public float moveSpeed;
     [HideInInspector] public Vector3 playerStopPosition;
 
+    [Header("External Objects")]
     [SerializeField] GameObject visionDebugger;
+    [SerializeField] GameObject hintCubePrefab;
+    [SerializeField] GameManager gameManager;
 
     float stepCounter;
     bool isMoving;
@@ -52,6 +55,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 moveSpeed = 0;
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
+            newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.nextGoal.position);
         }
 
 

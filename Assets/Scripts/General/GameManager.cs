@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Material keyMaterial;
     [SerializeField] Color keyColor;
 
+    public Transform nextGoal;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
