@@ -26,6 +26,14 @@ public class EnemyBehavior : MonoBehaviour
     [Header("Visual Feedback")]
     [SerializeField] float minimumFogDistance;
 
+    [Header("Attack State")]
+    [SerializeField] float attackRange = 10f;
+    [SerializeField] float attackMoveSpeed = 1f;
+    [SerializeField] float attackCamFOV = 90;
+    [SerializeField] float breathHoldTime = 4.5f;
+    [SerializeField] GameObject holdWarningText;
+    float breathTimer = 0;
+    float defaultCamFOV;
 
     //Components
     NavMeshAgent agent;
@@ -41,9 +49,12 @@ public class EnemyBehavior : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        holdWarningText.SetActive(false);
+
         agent = GetComponent<NavMeshAgent>();
         fieldOfView = GetComponent<EnemyFieldOfView>();
         player = GameObject.FindGameObjectWithTag("Player");
+        defaultCamFOV = Camera.main.fieldOfView;
 
         centerPoint = this.transform;
 
@@ -55,11 +66,12 @@ public class EnemyBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) { SetUpNextState(STATE.Attack); }
 
         float fogDelta = 0;
         float playerDistance = Vector3.Distance(this.transform.position, player.transform.position);
 
-        Debug.Log(playerDistance);
+        //Debug.Log(playerDistance);
 
         if (playerDistance < minimumFogDistance)
         { 
@@ -143,22 +155,72 @@ public class EnemyBehavior : MonoBehaviour
                     }
                 }
 
+                if (playerDistance < attackRange)
+                {
+                    SetUpNextState(STATE.Attack);
+                }
+
                 break;
             case STATE.Chase:
 
                 agent.SetDestination(player.transform.position);
 
-                if(agent.remainingDistance < agent.stoppingDistance && !agent.pathPending)
+                if(playerDistance < attackRange)
                 {
-                    //currentState = STATE.Idle;
-                    Debug.Log("You lost");
-                    SceneManager.LoadScene("Death");
+                    SetUpNextState(STATE.Attack);
                 }
 
                 break;
             case STATE.Attack:
+                agent.isStopped = true;
+
+                float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime;
+
+                Camera.main.fieldOfView -= fovRate * Time.deltaTime;
+
+                if (breathTimer < breathHoldTime)
+                {
+                    breathTimer += Time.deltaTime;
+                }
+                else
+                {
+                    Camera.main.fieldOfView = defaultCamFOV;
+
+                    // FOR VICTOR
+                    // monster should walk away/retreat/etc
+                    // maybe go back to a waypoint and start patrolling again?
+                }
+
+                // if close enough, kill
+                if (agent.remainingDistance < agent.stoppingDistance && !agent.pathPending)
+                {
+                    Debug.Log("You lost");
+                    SceneManager.LoadScene("Death");
+                }
                 break;
         }
+    }
+
+    public void BreakBreathHold()
+    {
+        if (currentState == STATE.Attack)
+        {
+            StartAttack();
+
+            agent.isStopped = false;
+            // FOR VICTOR
+            // monster should inch closer, not sure what best way to do that is, i never use navmesh lol
+        }
+    }
+
+    void StartAttack()
+    {
+        breathTimer = 0;
+        CameraControl.instance.ScreenShake(0.3f, 0.15f);
+        // set cam fov high
+        Camera.main.fieldOfView = attackCamFOV;
+        // warn to hold breath
+        holdWarningText.SetActive(true);
     }
 
     //Put set ups for states here
@@ -185,6 +247,7 @@ public class EnemyBehavior : MonoBehaviour
 
                 break;
             case STATE.Attack:
+                StartAttack();
                 break;
         }
 

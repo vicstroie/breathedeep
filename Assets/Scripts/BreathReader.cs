@@ -36,6 +36,7 @@ public class BreathReader : MonoBehaviour
 
     [SerializeField] UnityEvent onBreatheIn;
     [SerializeField] UnityEvent onBreatheOut;
+    [SerializeField] UnityEvent onStateChange;
 
     [Tooltip("How many frames one sample (average) is")]
     [SerializeField] int sampleLength = 15;
@@ -140,6 +141,7 @@ public class BreathReader : MonoBehaviour
                     breatheIn = true;
                     lastBreath = currentSample;
                     onBreatheIn.Invoke();
+                    onStateChange.Invoke();
                     //Debug.Log("breathe in");
                 }
             }
@@ -148,6 +150,7 @@ public class BreathReader : MonoBehaviour
                 if (currentSample < lastBreath)
                 {
                     breatheIn = false; onBreatheOut.Invoke();
+                    onStateChange.Invoke();
                     //Debug.Log("breathe out");
                 }
             }
