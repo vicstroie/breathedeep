@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,11 +14,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float[] turnIncrements; // rotation value is weird in Unity and it doesn't really wrap to 360, it goes to 180 and -180 on the other side
     
     CharacterController controller;
-
     [HideInInspector] public float moveSpeed;
     [HideInInspector] public Vector3 playerStopPosition;
 
+    [Header("External Objects")]
     [SerializeField] GameObject visionDebugger;
+    [SerializeField] GameObject hintCubePrefab;
+    [SerializeField] GameManager gameManager;
 
     int turnIndex = 0;
     float nextTurnTarget = 90; // stores the next increment of 90
@@ -88,6 +91,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 moveSpeed = 0;
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
+            newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.nextGoal.position);
         }
 
 

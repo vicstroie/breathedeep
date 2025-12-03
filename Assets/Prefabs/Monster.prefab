@@ -105,9 +105,12 @@ MonoBehaviour:
   stoppingDistance: 0
   idleTime: 5
   target: {fileID: 0}
-  usingWaypoints: 0
-  waypoints: []
+  usingWaypoints: 1
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
   waypointRadius: 20
+  minimumFogDistance: 20
 --- !u!114 &6620885827827458674
 MonoBehaviour:
   m_ObjectHideFlags: 0
