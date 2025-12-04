@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 2918706945510128257}
   - component: {fileID: 6693257445604913622}
   - component: {fileID: 1225971350280628833}
+  - component: {fileID: 3250119318232568127}
   - component: {fileID: 5998522874223221045}
   - component: {fileID: 5376286084933228517}
   m_Layer: 0
-  m_Name: Hint Cube
+  m_Name: HintFollower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -17.080027, y: -2.1680374, z: -10.303078}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -88,6 +89,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3250119318232568127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6127566756758003885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aabed0e8649b84e408f5e1219e83af20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 10
+  spawnTime: 0.5
+  hintSparkPrefab: {fileID: 6127566756758003885, guid: 8d88410497c94224bb5519b2b4313564, type: 3}
 --- !u!65 &5998522874223221045
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -119,7 +135,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 8
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
