@@ -7,6 +7,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.IO.Ports;
 using TMPro;
+using System.Linq;
 
 public class BreathReader : MonoBehaviour
 {
@@ -17,11 +18,13 @@ public class BreathReader : MonoBehaviour
     float adcMin = 10000;
     float adcMax = 0;
 
+    [Header("Debug")]
     [SerializeField] bool debug = false;
     [SerializeField] TMP_Text adcText;
     [SerializeField] TMP_Text avgText;
     [SerializeField] TMP_Text minMaxText;
     [SerializeField] GameObject calibratingText;
+    [SerializeField] TMP_Text inValueText;
     [SerializeField] Image bg;
     Color red;
 
@@ -33,14 +36,22 @@ public class BreathReader : MonoBehaviour
 
     [SerializeField] UnityEvent onBreatheIn;
     [SerializeField] UnityEvent onBreatheOut;
+    [SerializeField] UnityEvent onStateChange;
 
+    [Tooltip("How many frames one sample (average) is")]
+    [SerializeField] int sampleLength = 15;
+    [Tooltip("How many samples at a time to store")]
     [SerializeField] int sampleFrames = 15;
     [SerializeField] float sensThreshold = 5f; // should calibrate at start by having them stand still/hold their breath
 
     Queue<float> adcAverage = new Queue<float>(); // holds the values from the last 60 frames (or whatever the value of sampleFrames is) to average it
     Queue<float> samples = new Queue<float>();
     float currentSample;
+    float lastBreath; // the value of the sample at the last breathe in
 
+    public float CurrentADC { get { return sensorADC; } }
+    public float CurrentSample { get { return currentSample; } }
+    public Queue<float> StoredSamples { get { return samples; } }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -54,6 +65,11 @@ public class BreathReader : MonoBehaviour
         //sensorADC = FindFirstObjectByType<SerialReader>().GetValue();
         //Debug.Log(FindFirstObjectByType<SerialController>().ReadSerialMessage());
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            lastBreath = 0;
+            breatheIn = false;
+        }
 
         //if (Input.GetKeyDown(calibrateKey))
         //{
@@ -71,8 +87,7 @@ public class BreathReader : MonoBehaviour
         if (calibrating)
         {
             if (sensorADC > adcMax) { adcMax = sensorADC; }
-            if (sensorADC <adcMin) { adcMin = sensorADC; }
-
+            if (sensorADC < adcMin) { adcMin = sensorADC; }
         }
 
         if (debug) { adcText.text = "ADC: " + sensorADC.ToString(); }
@@ -90,12 +105,29 @@ public class BreathReader : MonoBehaviour
 
         if (calibrated)
         {
-            if (adcAverage.Count >= sampleFrames) { adcAverage.Dequeue(); }
+            if (adcAverage.Count >= sampleLength) { adcAverage.Dequeue(); }
             adcAverage.Enqueue(sensorADC);
 
             float total = 0;
-            foreach (float val in adcAverage) { total += val; }
-            currentSample = Mathf.Floor(total / adcAverage.Count);
+            float highest = 0;
+            int highestIndex = 0;
+            var avg = adcAverage.ToList<float>();
+            for (int i = 0; i < avg.Count; i++)
+            {
+                float val = avg[i];
+                if (val > highest)
+                {
+                    highest = val;
+                    highestIndex = i;
+                }
+            }
+            avg.RemoveAt(highestIndex);
+            foreach (float val in avg)
+            {
+                total += val;
+            }
+            currentSample = Mathf.Floor(total / avg.Count);
+            //currentSample = sensorADC;
 
             if (samples.Count > sampleFrames) { samples.Dequeue(); }
             samples.Enqueue(currentSample);
@@ -103,19 +135,23 @@ public class BreathReader : MonoBehaviour
             // so it only procs once
             if (!breatheIn)
             {
-                if (currentSample > samples.Peek() && currentSample-samples.Peek() >= sensThreshold) 
-                { 
-                    breatheIn = true; 
+                if (currentSample > samples.Peek() && currentSample - samples.Peek() >= sensThreshold)
+                {
+                    if (debug) { inValueText.text = "In value: " + currentSample.ToString(); }
+                    breatheIn = true;
+                    lastBreath = currentSample;
                     onBreatheIn.Invoke();
-                    Debug.Log("breathe in");
+                    onStateChange.Invoke();
+                    //Debug.Log("breathe in");
                 }
-            } 
+            }
             else
             {
-                if (currentSample < samples.Peek() && samples.Peek()-currentSample >= sensThreshold) 
-                { 
+                if (currentSample < lastBreath)
+                {
                     breatheIn = false; onBreatheOut.Invoke();
-                    Debug.Log("breathe out");
+                    onStateChange.Invoke();
+                    //Debug.Log("breathe out");
                 }
             }
 

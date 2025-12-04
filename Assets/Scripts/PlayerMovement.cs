@@ -8,6 +8,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float correctionSpeed;
     [SerializeField] float checkDistance;
     [SerializeField] LayerMask groundMask;
+    [SerializeField] float turnSpeed = 5f;
+    [Tooltip("How long to wait before starting to turn again after hitting a 90 degree increment")]
+    [SerializeField] float turnBufferTime = 0.5f;
+    [SerializeField] float[] turnIncrements; // rotation value is weird in Unity and it doesn't really wrap to 360, it goes to 180 and -180 on the other side
     
     CharacterController controller;
     [HideInInspector] public float moveSpeed;
@@ -18,10 +22,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject hintCubePrefab;
     [SerializeField] GameManager gameManager;
 
+    int turnIndex = 0;
+    float nextTurnTarget = 90; // stores the next increment of 90
+    float currentRot = 0; // rotation direction works weird via script, so basically tracking an internal rotation
+    float currentTurn = 0; // goes up to 90 then resets
+
     float stepCounter;
     bool isMoving;
-    bool canMove;
+    bool canMove = true;
     bool isSearching;
+    bool turning;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,6 +43,32 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PedalInput.LeftDown || PedalInput.RightDown)
+        {
+            if (!turning)
+            {
+                turning = true;
+                if (transform.eulerAngles.y % 90 == 0) // only if already on a perfect increment
+                {
+                    nextTurnTarget = currentRot + 90 * PedalInput.InputValue;
+                    currentTurn = 0;
+                }
+            }
+            if (currentTurn + turnSpeed * Time.deltaTime >= 90) 
+            {
+                currentRot = nextTurnTarget;
+                transform.eulerAngles = new Vector3(0, currentRot, 0);
+                return; 
+            }
+            currentRot += turnSpeed * Time.deltaTime * PedalInput.InputValue;
+            currentTurn += turnSpeed * Time.deltaTime;
+            transform.eulerAngles = new Vector3(0, currentRot, 0);
+        }
+        else
+        {
+            turning = false;
+        }
+
         //moveSpeed = MicrophoneInput.MicLoudness * maxMoveSpeed;
 
         if(Input.GetKeyDown(KeyCode.W))
@@ -78,7 +114,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        
+
+        #region TURNING   
 
         if (Input.GetKeyDown(KeyCode.D))
         {
@@ -88,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.Rotate(0, -90, 0);
         }
-
+        #endregion
 
 
         //controller.Move(transform.forward * moveSpeed * Time.deltaTime);
@@ -123,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
         if (isSearching)
         {
             Vector3 raycastOrigin = this.transform.position + (transform.forward * checkDistance);
-            visionDebugger.transform.position = raycastOrigin;
+            if (visionDebugger != null) { visionDebugger.transform.position = raycastOrigin; }
 
             RaycastHit hit;
             if (Physics.Raycast(raycastOrigin, Vector3.down, out hit))
@@ -166,9 +203,22 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
-    public void MovePlayer()
+    public void SetCanMove(bool _canMove)
     {
-        stepCounter = 3;
+        canMove = _canMove;
+        
+        if (!canMove) { stepCounter = 0; }
     }
 
+    public void MovePlayer()
+    {
+        if (!canMove) { return; }
+        stepCounter = 4;
+    }
+
+    // used by Unity Events on PedalInput
+    public void Turn(float dir)
+    {
+        transform.Rotate(0, 90 * dir, 0);
+    }
 }
