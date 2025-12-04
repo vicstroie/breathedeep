@@ -66,7 +66,7 @@ public class EnemyBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) { SetUpNextState(STATE.Attack); }
+        if (Input.GetKeyDown(KeyCode.Space)) { SetUpNextState(STATE.Attack); } // REMOVE THIS AFTER SETTING IT UP TO MONSTER STATES
 
         float fogDelta = 0;
         float playerDistance = Vector3.Distance(this.transform.position, player.transform.position);
@@ -174,21 +174,27 @@ public class EnemyBehavior : MonoBehaviour
             case STATE.Attack:
                 agent.isStopped = true;
 
-                float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime;
+                float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime - 0.5f;
 
                 Camera.main.fieldOfView -= fovRate * Time.deltaTime;
 
+                // count up
                 if (breathTimer < breathHoldTime)
                 {
                     breathTimer += Time.deltaTime;
                 }
                 else
                 {
+                    // resume normal movement
                     Camera.main.fieldOfView = defaultCamFOV;
+                    holdWarningText.SetActive(false);
+                    FindFirstObjectByType<PlayerMovement>().SetCanMove(true);
+
 
                     // FOR VICTOR
                     // monster should walk away/retreat/etc
                     // maybe go back to a waypoint and start patrolling again?
+                    SetUpNextState(STATE.Patrol);
                 }
 
                 // if close enough, kill
@@ -206,6 +212,8 @@ public class EnemyBehavior : MonoBehaviour
         if (currentState == STATE.Attack)
         {
             StartAttack();
+
+            Debug.Log("broke");
 
             agent.isStopped = false;
             // FOR VICTOR
@@ -248,6 +256,7 @@ public class EnemyBehavior : MonoBehaviour
                 break;
             case STATE.Attack:
                 StartAttack();
+                FindFirstObjectByType<PlayerMovement>().SetCanMove(false);
                 break;
         }
 

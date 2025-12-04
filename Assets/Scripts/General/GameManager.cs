@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-        Debug.Log(keyMaterial.color.a);
+        //Debug.Log(keyMaterial.color.a);
 
         if(Input.GetKey(KeyCode.W))
         {

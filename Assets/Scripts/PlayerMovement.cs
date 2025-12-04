@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
 
     float stepCounter;
     bool isMoving;
-    bool canMove;
+    bool canMove = true;
     bool isSearching;
     bool turning;
 
@@ -203,9 +203,17 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
+    public void SetCanMove(bool _canMove)
+    {
+        canMove = _canMove;
+        
+        if (!canMove) { stepCounter = 0; }
+    }
+
     public void MovePlayer()
     {
-        stepCounter = 3;
+        if (!canMove) { return; }
+        stepCounter = 4;
     }
 
     // used by Unity Events on PedalInput
