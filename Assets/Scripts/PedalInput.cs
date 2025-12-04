@@ -16,14 +16,14 @@ public class PedalInput : MonoBehaviour
 
     static float inputValue;
 
-    static bool leftDown = false;
-    static bool rightDown = false;
+    static bool left = false;
+    static bool right = false;
 
     //public static PedalInput instance;
 
     public static float InputValue { get { return inputValue; } }
-    public static bool LeftDown { get { return leftDown; } }
-    public static bool RightDown { get { return rightDown; } }
+    public static bool Left { get { return left; } }
+    public static bool Right { get { return right; } }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,15 +35,15 @@ public class PedalInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        leftDown = Input.GetKey(leftKey);
-        rightDown = Input.GetKey(rightKey);
+        left = Input.GetKey(leftKey);
+        right = Input.GetKey(rightKey);
 
         if (Input.GetKeyDown(leftKey)) { onLeftDown.Invoke(); }
         if (Input.GetKeyDown(rightKey)) { onRightDown.Invoke(); }
 
-        if (leftDown) { onLeft.Invoke(); }
-        if (rightDown) { onRight.Invoke(); }
+        if (left) { onLeft.Invoke(); }
+        if (right) { onRight.Invoke(); }
 
-        inputValue = (Convert.ToInt32(leftDown) * -1) + (Convert.ToInt32(rightDown));
+        inputValue = (Convert.ToInt32(left) * -1) + (Convert.ToInt32(right));
     }
 }

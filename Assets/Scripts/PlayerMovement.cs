@@ -11,8 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float turnSpeed = 5f;
     [Tooltip("How long to wait before starting to turn again after hitting a 90 degree increment")]
     [SerializeField] float turnBufferTime = 0.5f;
-    [SerializeField] float[] turnIncrements; // rotation value is weird in Unity and it doesn't really wrap to 360, it goes to 180 and -180 on the other side
-    
+
     CharacterController controller;
     [HideInInspector] public float moveSpeed;
     [HideInInspector] public Vector3 playerStopPosition;
@@ -22,56 +21,69 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject hintCubePrefab;
     [SerializeField] GameManager gameManager;
 
-    int turnIndex = 0;
+    float trueZeroRot; // the rotation at Start(), get's added to internal currentRot
     float nextTurnTarget = 90; // stores the next increment of 90
     float currentRot = 0; // rotation direction works weird via script, so basically tracking an internal rotation
     float currentTurn = 0; // goes up to 90 then resets
+    float turnDir = 1; // 1 or -1, based on PedalInput.InputValue when first pressed
 
     float stepCounter;
     bool isMoving;
     bool canMove = true;
     bool isSearching;
-    bool turning;
+    bool isTurning;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         controller = GetComponent<CharacterController>();
         isSearching = true;
+        trueZeroRot = transform.eulerAngles.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (PedalInput.LeftDown || PedalInput.RightDown)
+        // TODO maybe make this on leftdown/rightdown, bc if you swap keys it keeps turning (in the same direction as before)
+        if (PedalInput.Left || PedalInput.Right)
         {
-            if (!turning)
+            if (!isTurning)
             {
-                turning = true;
-                if (transform.eulerAngles.y % 90 == 0) // only if already on a perfect increment
+                if (turnDir != PedalInput.InputValue) // if not the same as last turn input
                 {
-                    nextTurnTarget = currentRot + 90 * PedalInput.InputValue;
+                    turnDir = PedalInput.InputValue;
+                    nextTurnTarget += 90 * turnDir;
+                    currentTurn = 90 - currentTurn;
+                }
+                
+                isTurning = true;
+                if (Mathf.Floor(transform.eulerAngles.y) % 90 == 0) // only if already on a perfect increment
+                {
+                    nextTurnTarget = currentRot + 90 * turnDir;
                     currentTurn = 0;
                 }
             }
-            if (currentTurn + turnSpeed * Time.deltaTime >= 90) 
+
+            //Debug.Log(currentTurn + turnSpeed * Time.deltaTime);
+            if (currentTurn + turnSpeed * Time.deltaTime >= 90)
             {
+                // reached an increment
                 currentRot = nextTurnTarget;
-                transform.eulerAngles = new Vector3(0, currentRot, 0);
-                return; 
+                transform.eulerAngles = new Vector3(0, trueZeroRot + currentRot, 0);
+                return;
             }
-            currentRot += turnSpeed * Time.deltaTime * PedalInput.InputValue;
+            currentRot += turnSpeed * Time.deltaTime * turnDir;
             currentTurn += turnSpeed * Time.deltaTime;
-            transform.eulerAngles = new Vector3(0, currentRot, 0);
+            transform.eulerAngles = new Vector3(0, trueZeroRot + currentRot, 0);
         }
         else
         {
-            turning = false;
+            isTurning = false;
         }
 
         //moveSpeed = MicrophoneInput.MicLoudness * maxMoveSpeed;
 
-        if(Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             stepCounter = 3;
         }
@@ -93,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.U))
         {
             GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
             newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.nextGoal.position);
@@ -102,12 +114,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (isMoving)
         {
-            if(this.transform.position != playerStopPosition)
+            if (this.transform.position != playerStopPosition)
             {
                 this.transform.position = Vector3.MoveTowards(this.transform.position, playerStopPosition, correctionSpeed * Time.deltaTime);
-                
 
-            } else
+
+            }
+            else
             {
                 isMoving = false;
                 isSearching = true;
@@ -115,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        #region TURNING   
+        #region isTurning   
 
         if (Input.GetKeyDown(KeyCode.D))
         {
@@ -176,12 +189,12 @@ public class PlayerMovement : MonoBehaviour
                         AudioManager.instance.PlayFootsteps();
 
                         playerStopPosition = hit.transform.gameObject.GetComponent<GridSpace>().playerStopPosition;
-                        if(hit.transform.gameObject.GetComponent<GridSpace>().isTurn && stepCounter != 0)
+                        if (hit.transform.gameObject.GetComponent<GridSpace>().isTurn && stepCounter != 0)
                         {
                             Debug.Log("THIS IS A TURN");
                             stepCounter = 0;
                             Debug.Log(stepCounter);
-                            
+
                         }
 
                         isSearching = false;
@@ -190,23 +203,24 @@ public class PlayerMovement : MonoBehaviour
 
 
                 }
-            } else
+            }
+            else
             {
 
                 stepCounter = 0;
 
-                Debug.Log("end piece");
+                //Debug.Log("end piece");
 
             }
         }
 
-        
+
     }
 
     public void SetCanMove(bool _canMove)
     {
         canMove = _canMove;
-        
+
         if (!canMove) { stepCounter = 0; }
     }
 
