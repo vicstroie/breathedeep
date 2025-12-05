@@ -15,10 +15,10 @@ MonoBehaviour:
   Path: Assets/Sounds/BreatheDeepFMOD/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639002217025913200
+  lastModified: 639005524690124873
   FileSizes:
   - Name: Desktop
-    Value: 1608512
+    Value: 2028448
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -41,13 +41,14 @@ MonoBehaviour:
   - {fileID: 3935883649657406205}
   - {fileID: 2232702981053433865}
   - {fileID: 1680327244437399427}
+  - {fileID: 1773059375603406484}
   EditorParameters: []
   MasterBanks:
   - {fileID: -7426396059342447758}
   StringsBanks:
   - {fileID: 3734121213632852919}
   cacheVersion: 131856
-  cacheTime: 639002217025923201
+  cacheTime: 639005524690141616
   SerializableEventsDict:
   - key: event:/Ambience
     index: 0
@@ -59,6 +60,8 @@ MonoBehaviour:
     index: 3
   - key: event:/Monster Spawn
     index: 4
+  - key: event:/Player Hit
+    index: 5
 --- !u!114 &949726898702672498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,6 +116,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2500
+--- !u!114 &1773059375603406484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Player Hit
+  m_EditorClassIdentifier: 
+  Path: event:/Player Hit
+  Guid:
+    Data1: -840130730
+    Data2: 1103770961
+    Data3: -572258929
+    Data4: -560404405
+  Banks:
+  - {fileID: -7426396059342447758}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 4000
 --- !u!114 &2232702981053433865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,13 +163,13 @@ MonoBehaviour:
     Data4: 400163703
   Banks:
   - {fileID: -7426396059342447758}
-  IsStream: 0
-  Is3D: 0
+  IsStream: 1
+  Is3D: 1
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 2500
+  Length: 34000
 --- !u!114 &3370367385313210416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,10 +212,10 @@ MonoBehaviour:
   Path: Assets/Sounds/BreatheDeepFMOD/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639002217025923201
+  lastModified: 639005524690141616
   FileSizes:
   - Name: Desktop
-    Value: 960
+    Value: 1106
   Exists: 1
 --- !u!114 &3935883649657406205
 MonoBehaviour:

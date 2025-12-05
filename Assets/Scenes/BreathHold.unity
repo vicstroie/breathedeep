@@ -11913,7 +11913,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyMaterial: {fileID: 2100000, guid: 36cdb4e9bb2245f419a70098235c54f2, type: 2}
   keyColor: {r: 0.972549, g: 1, b: 0, a: 1}
-  nextGoal: {fileID: 1723146981}
+  currentGoal: {fileID: 0}
 --- !u!1 &1124964730
 GameObject:
   m_ObjectHideFlags: 0
@@ -18266,13 +18266,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 038daba82599a7e4e97aae9e228692aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySpawnLocation: {fileID: 939691682}
-  centerPoint: {fileID: 978289662}
-  waypointRadius: 50
-  enemyPrefab: {fileID: 4444427872955437552, guid: 49baa52bbb29e08438f330c605cdb149, type: 3}
-  keyCamera: {fileID: 0}
-  doorCamera: {fileID: 0}
   lockedDoor: {fileID: 2018985876}
+  gameManager: {fileID: 0}
+  trigger: {fileID: 0}
 --- !u!1001 &1733449154
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21591,6 +21587,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUnlocked: 0
+  manager: {fileID: 0}
+  key: {fileID: 0}
 --- !u!1 &2021676303
 GameObject:
   m_ObjectHideFlags: 0

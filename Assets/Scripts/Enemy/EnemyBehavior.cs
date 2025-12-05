@@ -64,6 +64,8 @@ public class EnemyBehavior : MonoBehaviour
         SetUpNextState(STATE.SetUp);
 
         AudioManager.instance.PlayMonsterSpawn();
+        AudioManager.instance.PlayMonsterAmbience();
+        AudioManager.instance.SetMonsterTransform(transform);
     }
 
     // Update is called once per frame
@@ -257,8 +259,13 @@ public class EnemyBehavior : MonoBehaviour
                         Debug.Log("You lost");
                         SceneManager.LoadScene("Death");
                     }
+
+                    
                     break;
             }
+
+        //AudioManager.instance.ChangeMonsterDistanceParameter(playerDistance);
+        //AudioManager.instance.ChangeMonsterDirectionParameter(Vector3.Angle(player.transform.position, transform.position));
     }
 
     // called by BreathReader OnStateChange unity event
@@ -332,6 +339,8 @@ public class EnemyBehavior : MonoBehaviour
         PostProcessControl.instance.vignetteIntensity = 0.45f;
         // warn to hold breath
         holdWarningText.SetActive(true);
+
+        AudioManager.instance.PlayPlayerHit();
     }
 
     //Put set ups for states here

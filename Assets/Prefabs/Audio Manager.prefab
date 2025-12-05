@@ -79,3 +79,10 @@ MonoBehaviour:
       Data3: -782544458
       Data4: 400163703
     Path: event:/Monster Ambience
+  playerHit:
+    Guid:
+      Data1: -840130730
+      Data2: 1103770961
+      Data3: -572258929
+      Data4: -560404405
+    Path: event:/Player Hit

@@ -16885,6 +16885,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f94f729f2b4ca84b8eae565bdf1dd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
+  adcText: {fileID: 0}
+  avgText: {fileID: 0}
+  minMaxText: {fileID: 0}
+  calibratingText: {fileID: 0}
+  inValueText: {fileID: 0}
+  bg: {fileID: 0}
+  calibrateKey: 32
+  onBreatheIn:
+    m_PersistentCalls:
+      m_Calls: []
+  onBreatheOut:
+    m_PersistentCalls:
+      m_Calls: []
+  onStateChange:
+    m_PersistentCalls:
+      m_Calls: []
+  sampleLength: 15
+  sampleFrames: 15
+  sensThreshold: 5
 --- !u!4 &1788543030
 Transform:
   m_ObjectHideFlags: 0
@@ -21087,6 +21107,26 @@ PrefabInstance:
     - target: {fileID: 3983075460810826370, guid: ceec082b4d836844aa941c540b12e1ae, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8851058210947461104, guid: ceec082b4d836844aa941c540b12e1ae, type: 3}
+      propertyPath: playerHit.Path
+      value: event:/Player Hit
+      objectReference: {fileID: 0}
+    - target: {fileID: 8851058210947461104, guid: ceec082b4d836844aa941c540b12e1ae, type: 3}
+      propertyPath: playerHit.Guid.Data1
+      value: -840130730
+      objectReference: {fileID: 0}
+    - target: {fileID: 8851058210947461104, guid: ceec082b4d836844aa941c540b12e1ae, type: 3}
+      propertyPath: playerHit.Guid.Data2
+      value: 1103770961
+      objectReference: {fileID: 0}
+    - target: {fileID: 8851058210947461104, guid: ceec082b4d836844aa941c540b12e1ae, type: 3}
+      propertyPath: playerHit.Guid.Data3
+      value: -572258929
+      objectReference: {fileID: 0}
+    - target: {fileID: 8851058210947461104, guid: ceec082b4d836844aa941c540b12e1ae, type: 3}
+      propertyPath: playerHit.Guid.Data4
+      value: -560404405
       objectReference: {fileID: 0}
     - target: {fileID: 9077167900124530473, guid: ceec082b4d836844aa941c540b12e1ae, type: 3}
       propertyPath: m_Name

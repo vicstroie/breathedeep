@@ -9,6 +9,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] FMODUnity.EventReference keyPickup;
     [SerializeField] FMODUnity.EventReference monsterSpawn;
     [SerializeField] FMODUnity.EventReference monsterAmbience;
+    [SerializeField] FMODUnity.EventReference playerHit;
+
+    FMOD.Studio.EventInstance monsterAmbienceInstance;
 
     private void Awake()
     {
@@ -27,6 +30,8 @@ public class AudioManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        monsterAmbienceInstance = FMODUnity.RuntimeManager.CreateInstance(monsterAmbience);
+
         PlayAmbience();
     }
 
@@ -42,12 +47,22 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMonsterAmbience()
     {
-        FMODUnity.RuntimeManager.PlayOneShot(monsterAmbience);
+        monsterAmbienceInstance.start();
+    }
+
+    public void SetMonsterTransform(Transform transform)
+    {
+        monsterAmbienceInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(transform));
     }
 
     public void PlayMonsterSpawn()
     {
         FMODUnity.RuntimeManager.PlayOneShot(monsterSpawn);
+    }
+
+    public void PlayPlayerHit()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(playerHit);
     }
 
     public void PlayKeyPickup()
