@@ -4,8 +4,8 @@ using System;
 
 public class PedalInput : MonoBehaviour
 {
-    [SerializeField] KeyCode leftKey = KeyCode.K;
-    [SerializeField] KeyCode rightKey = KeyCode.L;
+    [SerializeField] public KeyCode leftKey = KeyCode.K;
+    [SerializeField] public KeyCode rightKey = KeyCode.L;
 
     [Header("Events")]
     [Space(5)]
@@ -19,7 +19,7 @@ public class PedalInput : MonoBehaviour
     static bool left = false;
     static bool right = false;
 
-    //public static PedalInput instance;
+    public static PedalInput instance;
 
     public static float InputValue { get { return inputValue; } }
     public static bool Left { get { return left; } }
@@ -28,8 +28,8 @@ public class PedalInput : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //if (instance == null) { instance = this; }
-        //else { Destroy(gameObject); }
+        if (instance == null) { instance = this; }
+        else { Destroy(gameObject); }
     }
 
     // Update is called once per frame
