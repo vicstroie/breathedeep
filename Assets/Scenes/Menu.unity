@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blackout: {fileID: 607880884}
-  fadeSpeed: 10
+  fadeSpeed: 0.5
 --- !u!4 &82579137
 Transform:
   m_ObjectHideFlags: 0
