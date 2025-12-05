@@ -9,8 +9,6 @@ public class GameManager : MonoBehaviour
 
     public Transform currentGoal;
 
-    List<Transform> goals;
-
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,5 +22,10 @@ public class GameManager : MonoBehaviour
 
 
             
+    }
+
+    public void SetCurrentGoal(Transform goal)
+    {
+        currentGoal = goal;
     }
 }

@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class LockedDoor : MonoBehaviour
 {
-
     public bool isUnlocked;
+
+    [SerializeField] GameManager manager;
+    [SerializeField] GameObject key;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,6 +27,9 @@ public class LockedDoor : MonoBehaviour
         } else
         {
             Debug.Log("Need KEY");
+
+            manager.SetCurrentGoal(key.transform);
+
         }
     }
 

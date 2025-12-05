@@ -2,25 +2,15 @@ using UnityEngine;
 
 public class KeyBehavior : MonoBehaviour
 {
-    [Header("Enemy Spawn")]
-    [SerializeField] Transform enemySpawnLocation;
-    [SerializeField] Transform centerPoint;
-    [SerializeField] float waypointRadius;
-
-    [Header("Prefabs")]
-    [SerializeField] GameObject enemyPrefab;
-
-    [Header("Cameras")]
-    [SerializeField] GameObject keyCamera;
-    [SerializeField] GameObject doorCamera;
-
     [Header("Other")]
     [SerializeField] LockedDoor lockedDoor;
+    [SerializeField] GameManager gameManager;
+    [SerializeField] EnemySpawnTrigger trigger;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        trigger.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -33,13 +23,9 @@ public class KeyBehavior : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            GameObject newEnemy = Instantiate(enemyPrefab, enemySpawnLocation.position, Quaternion.identity);
-            newEnemy.GetComponent<EnemyBehavior>().SetCenterPoint(centerPoint, waypointRadius);
-
             lockedDoor.isUnlocked = true;
-
-            keyCamera.SetActive(false);
-            doorCamera.SetActive(true);
+            gameManager.SetCurrentGoal(lockedDoor.transform);
+            trigger.gameObject.SetActive(true);
 
             AudioManager.instance.PlayKeyPickup();
             Destroy(this.gameObject);

@@ -108,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.U))
         {
             GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
-            newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.nextGoal.position);
+            newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
         }
 
 

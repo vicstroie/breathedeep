@@ -18,7 +18,7 @@ public class EnemyBehavior : MonoBehaviour
 
     [Header("External Components")]
     [SerializeField] Transform target;
-    Transform centerPoint;
+    Transform firstWaypoint;
     GameObject player;
 
     [Header("Pathfinding")]
@@ -49,7 +49,7 @@ public class EnemyBehavior : MonoBehaviour
         SetUp, Idle, Patrol, Chase, Attack
     }
 
-    STATE currentState = STATE.Idle;
+    STATE currentState = STATE.SetUp;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -61,9 +61,7 @@ public class EnemyBehavior : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         defaultCamFOV = Camera.main.fieldOfView;
 
-        centerPoint = this.transform;
-
-        SetUpNextState(STATE.Idle);
+        SetUpNextState(STATE.SetUp);
 
         AudioManager.instance.PlayMonsterSpawn();
     }
@@ -73,52 +71,175 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space)) { SetUpNextState(STATE.Attack); } // REMOVE THIS AFTER SETTING IT UP TO MONSTER STATES
 
-        float fogDelta = 0;
-        float playerDistance = Vector3.Distance(this.transform.position, player.transform.position);
 
-        //Debug.Log(playerDistance);
+        float playerDistance = 0;
 
-        if (playerDistance < minimumFogDistance)
-        { 
-            fogDelta = (1 / playerDistance) + 0.4f;
+        if (player != null)
+        {
+            playerDistance = Vector3.Distance(this.transform.position, player.transform.position);
         } else
         {
-            fogDelta = 0.2f;
+            player = GameObject.FindGameObjectWithTag("Player");
         }
 
-        if (RenderSettings.fogDensity != fogDelta) RenderSettings.fogDensity = Mathf.MoveTowards(RenderSettings.fogDensity, fogDelta, 2 * Time.deltaTime);
+            /*
+            float fogDelta = 0;
 
-        switch (currentState)
-        {
-            case STATE.Idle:
 
-                //For testing
-                if(Input.GetKeyDown(KeyCode.C))
-                {
-                    currentState = STATE.Chase;
-                }
+            //Debug.Log(playerDistance);
 
-                idleTimer += Time.deltaTime;
+            if (playerDistance < minimumFogDistance)
+            { 
+                fogDelta = (1 / playerDistance) + 0.4f;
+            } else
+            {
+                fogDelta = 0.2f;
+            }
 
-                if (idleTimer > idleTime)
-                {
-                    if (usingWaypoints)
+
+            if (RenderSettings.fogDensity != fogDelta) RenderSettings.fogDensity = Mathf.MoveTowards(RenderSettings.fogDensity, fogDelta, 2 * Time.deltaTime);
+            */
+
+            switch (currentState)
+            {
+
+                case STATE.SetUp:
+
+
+                    if (firstWaypoint != null)
                     {
-                        if (waypoints.Count > 0)
+                        agent.SetDestination(firstWaypoint.position);
+                        agent.isStopped = false;
+                        agent.speed = roamSpeed;
+                    }
+
+                    if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+                    {
+                        SetUpNextState(STATE.Patrol);
+                    }
+
+
+
+                    break;
+
+                case STATE.Idle:
+
+                    //For testing
+                    if (Input.GetKeyDown(KeyCode.C))
+                    {
+                        currentState = STATE.Chase;
+                    }
+
+                    idleTimer += Time.deltaTime;
+
+                    if (idleTimer > idleTime)
+                    {
+                        if (usingWaypoints)
                         {
-                            //Will not go to navigation if there are no waypoints and navigation relies on waypoints
-                            SetUpNextState(STATE.Patrol);
+                            if (waypoints.Count > 0)
+                            {
+                                //Will not go to navigation if there are no waypoints and navigation relies on waypoints
+                                SetUpNextState(STATE.Patrol);
+                            }
+                            else
+                            {
+                                //Stops using waypoints if no waypoints are passed in
+                                usingWaypoints = false;
+                            }
                         }
                         else
                         {
-                            //Stops using waypoints if no waypoints are passed in
-                            usingWaypoints = false;
+                            //Locates a random point in the pre-defined radius to move towards
+                            //MOVED FROM PATROL - NEEDED A WAY TO FIND THE POINT BEFORE IT PATROLS, NEEDED MORE THAN ONE FRAME IN CASE POINT WAS NOT IN NAVMESH
+                            Vector3 point;
+                            if (FindRandomWaypoint(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
+                            {
+                                Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
+                                agent.SetDestination(point);
+
+                                SetUpNextState(STATE.Patrol);
+
+                            }
+                        }
+
+                    }
+
+                    break;
+                case STATE.Patrol:
+
+                    if (usingWaypoints)
+                    {
+                        //Make agent walk to next patrol point
+                        agent.SetDestination(waypoints[currentWaypoint].position);
+
+                        //Goes back into idle once it reaches its destination
+                        if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+                        {
+
+                            //Will move to next waypoint next time it enters the patrol state
+                            currentWaypoint++;
+                            if (currentWaypoint > waypoints.Count - 1) currentWaypoint = 0;
+
+                            SetUpNextState(STATE.Idle);
                         }
                     }
                     else
                     {
-                        //Locates a random point in the pre-defined radius to move towards
-                        //MOVED FROM PATROL - NEEDED A WAY TO FIND THE POINT BEFORE IT PATROLS, NEEDED MORE THAN ONE FRAME IN CASE POINT WAS NOT IN NAVMESH
+                        if (agent.remainingDistance <= agent.stoppingDistance) //done with path
+                        {
+                            //Go back to idle once waypoint is reached
+                            SetUpNextState(STATE.Idle);
+                        }
+                    }
+
+                    if (playerDistance < attackRange)
+                    {
+                        SetUpNextState(STATE.Attack);
+                    }
+
+                    break;
+                case STATE.Chase:
+
+                    agent.SetDestination(player.transform.position);
+
+                    if (playerDistance < attackRange)
+                    {
+                        SetUpNextState(STATE.Attack);
+                    }
+
+                    break;
+                case STATE.Attack:
+                    agent.isStopped = true;
+
+                    float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime - 0.5f;
+                    float abbRate = 1 / breathHoldTime;
+                    float vignetteRate = 0.25f / breathHoldTime;
+
+                    // zoom in and ease chromatic aberration as holding breath
+                    if (!easingFOV)
+                    {
+                        Camera.main.fieldOfView -= fovRate * Time.deltaTime;
+                        PostProcessControl.instance.aberrationIntesity -= abbRate * Time.deltaTime;
+                        PostProcessControl.instance.vignetteIntensity -= vignetteRate * Time.deltaTime;
+                    }
+
+                    // count up
+                    if (breathTimer < breathHoldTime)
+                    {
+                        breathTimer += Time.deltaTime;
+                    }
+                    else
+                    {
+                        // resume normal movement and player state
+                        StartCoroutine(EaseFOV(defaultCamFOV, -5.5f));
+                        PostProcessControl.instance.aberrationIntesity = 0;
+                        PostProcessControl.instance.vignetteIntensity = PostProcessControl.instance.defaultVignette;
+                        holdWarningText.SetActive(false);
+                        FindFirstObjectByType<PlayerMovement>().SetCanMove(true);
+
+                        // FOR VICTOR
+                        // monster should walk away/retreat/etc
+                        // maybe go back to a waypoint and start patrolling again?
                         Vector3 point;
                         if (FindRandomWaypoint(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
                         {
@@ -130,103 +251,14 @@ public class EnemyBehavior : MonoBehaviour
                         }
                     }
 
-                }
-
-                break;
-            case STATE.Patrol:
-
-                if (usingWaypoints)
-                {
-                    //Make agent walk to next patrol point
-                    agent.SetDestination(waypoints[currentWaypoint].position);
-
-                    //Goes back into idle once it reaches its destination
-                    if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+                    // if close enough, kill
+                    if (agent.remainingDistance < agent.stoppingDistance && !agent.pathPending)
                     {
-
-                        //Will move to next waypoint next time it enters the patrol state
-                        currentWaypoint++;
-                        if (currentWaypoint > waypoints.Count - 1) currentWaypoint = 0;
-
-                        SetUpNextState(STATE.Idle);
+                        Debug.Log("You lost");
+                        SceneManager.LoadScene("Death");
                     }
-                }
-                else
-                {
-                    if (agent.remainingDistance <= agent.stoppingDistance) //done with path
-                    {
-                        //Go back to idle once waypoint is reached
-                        SetUpNextState(STATE.Idle);
-                    }
-                }
-
-                if (playerDistance < attackRange)
-                {
-                    SetUpNextState(STATE.Attack);
-                }
-
-                break;
-            case STATE.Chase:
-
-                agent.SetDestination(player.transform.position);
-
-                if(playerDistance < attackRange)
-                {
-                    SetUpNextState(STATE.Attack);
-                }
-
-                break;
-            case STATE.Attack:
-                agent.isStopped = true;
-
-                float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime - 0.5f;
-                float abbRate = 1 / breathHoldTime;
-                float vignetteRate = 0.25f / breathHoldTime;
-
-                // zoom in and ease chromatic aberration as holding breath
-                if (!easingFOV) 
-                { 
-                    Camera.main.fieldOfView -= fovRate * Time.deltaTime;
-                    PostProcessControl.instance.aberrationIntesity -= abbRate * Time.deltaTime;
-                    PostProcessControl.instance.vignetteIntensity -= vignetteRate * Time.deltaTime;
-                }
-
-                // count up
-                if (breathTimer < breathHoldTime)
-                {
-                    breathTimer += Time.deltaTime;
-                }
-                else
-                {
-                    // resume normal movement and player state
-                    StartCoroutine(EaseFOV(defaultCamFOV, -5.5f));
-                    PostProcessControl.instance.aberrationIntesity = 0;
-                    PostProcessControl.instance.vignetteIntensity = PostProcessControl.instance.defaultVignette;
-                    holdWarningText.SetActive(false);
-                    FindFirstObjectByType<PlayerMovement>().SetCanMove(true);
-
-                    // FOR VICTOR
-                    // monster should walk away/retreat/etc
-                    // maybe go back to a waypoint and start patrolling again?
-                    Vector3 point;
-                    if (FindRandomWaypoint(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
-                    {
-                        Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
-                        agent.SetDestination(point);
-
-                        SetUpNextState(STATE.Patrol);
-
-                    }
-                }
-
-                // if close enough, kill
-                if (agent.remainingDistance < agent.stoppingDistance && !agent.pathPending)
-                {
-                    Debug.Log("You lost");
-                    SceneManager.LoadScene("Death");
-                }
-                break;
-        }
+                    break;
+            }
     }
 
     // called by BreathReader OnStateChange unity event
@@ -358,10 +390,9 @@ public class EnemyBehavior : MonoBehaviour
         return false;
     }
 
-    public void SetCenterPoint(Transform centerPoint, float range)
+    public void SetFirstPoint(Transform centerPoint)
     {
-        this.centerPoint = centerPoint;
-        waypointRadius = range;
+        firstWaypoint = centerPoint;
     }
 
     private void OnCollisionEnter(Collision collision)
