@@ -107,14 +107,13 @@ MonoBehaviour:
   checkDistance: 2
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 123
   turnSpeed: 5
   turnBufferTime: 0.5
-  turnIncrements: []
   moveSpeed: 0
   playerStopPosition: {x: 0, y: 0, z: 0}
   visionDebugger: {fileID: 0}
-  hintCubePrefab: {fileID: 0}
+  hintCubePrefab: {fileID: 6127566756758003885, guid: 12c7816094b824c46aba3a27c281a5c7, type: 3}
   gameManager: {fileID: 0}
 --- !u!114 &1033767440048990212
 MonoBehaviour:
@@ -123,7 +122,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4099547436372127183}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef3e56a11d1c0714caae2f26adb99dc1, type: 3}
   m_Name: 

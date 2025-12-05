@@ -109,8 +109,13 @@ MonoBehaviour:
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
-  waypointRadius: 20
+  waypointRadius: 30
   minimumFogDistance: 20
+  attackRange: 10
+  attackMoveSpeed: 1
+  attackCamFOV: 90
+  breathHoldTime: 4.5
+  holdWarningText: {fileID: 0}
 --- !u!114 &6620885827827458674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8995af21e0044b94c9ba6122332fb2a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 6
+  radius: 15
   angle: 109
   playerRef: {fileID: 0}
   targetMask:

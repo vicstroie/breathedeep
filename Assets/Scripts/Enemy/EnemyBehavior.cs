@@ -12,6 +12,9 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] float stoppingDistance;
     [SerializeField] float idleTime;
     float idleTimer;
+    [SerializeField] float roamSpeed;
+    [SerializeField] float chaseSpeed;
+    [SerializeField] float stalkSpeed;
 
     [Header("External Components")]
     [SerializeField] Transform target;
@@ -43,7 +46,7 @@ public class EnemyBehavior : MonoBehaviour
     
     enum STATE
     {
-        Idle, Patrol, Chase, Attack
+        SetUp, Idle, Patrol, Chase, Attack
     }
 
     STATE currentState = STATE.Idle;
@@ -117,7 +120,7 @@ public class EnemyBehavior : MonoBehaviour
                         //Locates a random point in the pre-defined radius to move towards
                         //MOVED FROM PATROL - NEEDED A WAY TO FIND THE POINT BEFORE IT PATROLS, NEEDED MORE THAN ONE FRAME IN CASE POINT WAS NOT IN NAVMESH
                         Vector3 point;
-                        if (FindRandomWaypoint(centerPoint.position, waypointRadius, out point)) //pass in our centre point and radius of area
+                        if (FindRandomWaypoint(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
                         {
                             Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
                             agent.SetDestination(point);
@@ -135,7 +138,7 @@ public class EnemyBehavior : MonoBehaviour
                 if (usingWaypoints)
                 {
                     //Make agent walk to next patrol point
-                    agent.destination = waypoints[currentWaypoint].position;
+                    agent.SetDestination(waypoints[currentWaypoint].position);
 
                     //Goes back into idle once it reaches its destination
                     if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
@@ -206,7 +209,7 @@ public class EnemyBehavior : MonoBehaviour
                     // monster should walk away/retreat/etc
                     // maybe go back to a waypoint and start patrolling again?
                     Vector3 point;
-                    if (FindRandomWaypoint(centerPoint.position, waypointRadius, out point)) //pass in our centre point and radius of area
+                    if (FindRandomWaypoint(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
                     {
                         Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
                         agent.SetDestination(point);
@@ -234,6 +237,9 @@ public class EnemyBehavior : MonoBehaviour
             StartAttack();
 
             agent.isStopped = false;
+            agent.speed = stalkSpeed;
+
+
             // FOR VICTOR
             // monster should inch closer, not sure what best way to do that is, i never use navmesh lol
         }
@@ -311,10 +317,14 @@ public class EnemyBehavior : MonoBehaviour
 
                 agent.isStopped = false;
 
+                agent.speed = roamSpeed;
+
                 break;
             case STATE.Chase:
 
                 agent.isStopped = false;
+
+                agent.speed = chaseSpeed;
 
                 if (player == null) player = fieldOfView.playerRef;
 

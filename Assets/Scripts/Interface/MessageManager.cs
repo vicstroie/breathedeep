@@ -1,15 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
-public class GameManager : MonoBehaviour
+public class MessageManager : MonoBehaviour
 {
 
-    [SerializeField] Material keyMaterial;
-    [SerializeField] Color keyColor;
-
-    public Transform currentGoal;
-
-    List<Transform> goals;
+    [SerializeField] TextMeshProUGUI messageText;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -21,8 +17,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
-            
+        
     }
+
+
 }
