@@ -9547,7 +9547,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -14142,7 +14142,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1565119128}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -16227,33 +16227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f94f729f2b4ca84b8eae565bdf1dd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
-  adcText: {fileID: 0}
-  avgText: {fileID: 0}
-  minMaxText: {fileID: 0}
-  calibratingText: {fileID: 0}
-  bg: {fileID: 0}
-  calibrateKey: 32
-  onBreatheIn:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 79060218352598297}
-        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
-        m_MethodName: MovePlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onBreatheOut:
-    m_PersistentCalls:
-      m_Calls: []
-  sampleFrames: 15
-  sensThreshold: 5
 --- !u!4 &1788543030
 Transform:
   m_ObjectHideFlags: 0
@@ -20049,7 +20022,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 723622292626232128, guid: e0ac550adfefbe44488b90941569c979, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.4977708
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 723622292626232128, guid: e0ac550adfefbe44488b90941569c979, type: 3}
       propertyPath: m_LocalPosition.z
@@ -20130,17 +20103,6 @@ PrefabInstance:
       addedObject: {fileID: 290155436}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0ac550adfefbe44488b90941569c979, type: 3}
---- !u!114 &79060218352598297 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5320609769103479042, guid: e0ac550adfefbe44488b90941569c979, type: 3}
-  m_PrefabInstance: {fileID: 79060218352598296}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c4ab9ee565cfc44daefb88bc2313ec6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &79060218352598302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 723622292626232128, guid: e0ac550adfefbe44488b90941569c979, type: 3}
