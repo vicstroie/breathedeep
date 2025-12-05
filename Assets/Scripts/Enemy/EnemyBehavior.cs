@@ -177,9 +177,16 @@ public class EnemyBehavior : MonoBehaviour
                 agent.isStopped = true;
 
                 float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime - 0.5f;
+                float abbRate = 1 / breathHoldTime;
+                float vignetteRate = 0.25f / breathHoldTime;
 
-                // zoom in as holding breath
-                if (!easingFOV) { Camera.main.fieldOfView -= fovRate * Time.deltaTime; }
+                // zoom in and ease chromatic aberration as holding breath
+                if (!easingFOV) 
+                { 
+                    Camera.main.fieldOfView -= fovRate * Time.deltaTime;
+                    PostProcessControl.instance.aberrationIntesity -= abbRate * Time.deltaTime;
+                    PostProcessControl.instance.vignetteIntensity -= vignetteRate * Time.deltaTime;
+                }
 
                 // count up
                 if (breathTimer < breathHoldTime)
@@ -188,11 +195,12 @@ public class EnemyBehavior : MonoBehaviour
                 }
                 else
                 {
-                    // resume normal movement
+                    // resume normal movement and player state
                     StartCoroutine(EaseFOV(defaultCamFOV, -5.5f));
+                    PostProcessControl.instance.aberrationIntesity = 0;
+                    PostProcessControl.instance.vignetteIntensity = PostProcessControl.instance.defaultVignette;
                     holdWarningText.SetActive(false);
                     FindFirstObjectByType<PlayerMovement>().SetCanMove(true);
-
 
                     // FOR VICTOR
                     // monster should walk away/retreat/etc
@@ -210,13 +218,12 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
+    // called by BreathReader OnStateChange unity event
     public void BreakBreathHold()
     {
         if (currentState == STATE.Attack)
         {
             StartAttack();
-
-            Debug.Log("broke");
 
             agent.isStopped = false;
             // FOR VICTOR
@@ -273,7 +280,10 @@ public class EnemyBehavior : MonoBehaviour
         breathTimer = 0;
         CameraControl.instance.ScreenShake(0.3f, 0.15f);
         // set cam fov high
-        StartCoroutine(EaseFOV(attackCamFOV, 130));
+        StartCoroutine(EaseFOV(attackCamFOV, 145));
+        // turn up chromatic aberration and make vignette tighter
+        PostProcessControl.instance.aberrationIntesity = 1;
+        PostProcessControl.instance.vignetteIntensity = 0.45f;
         // warn to hold breath
         holdWarningText.SetActive(true);
     }
