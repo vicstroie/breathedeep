@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] GameObject holdWarningText;
     float breathTimer = 0;
     float defaultCamFOV;
+    bool easingFOV = false;
 
     //Components
     NavMeshAgent agent;
@@ -176,7 +178,8 @@ public class EnemyBehavior : MonoBehaviour
 
                 float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime - 0.5f;
 
-                Camera.main.fieldOfView -= fovRate * Time.deltaTime;
+                // zoom in as holding breath
+                if (!easingFOV) { Camera.main.fieldOfView -= fovRate * Time.deltaTime; }
 
                 // count up
                 if (breathTimer < breathHoldTime)
@@ -186,7 +189,7 @@ public class EnemyBehavior : MonoBehaviour
                 else
                 {
                     // resume normal movement
-                    Camera.main.fieldOfView = defaultCamFOV;
+                    StartCoroutine(EaseFOV(defaultCamFOV, -5.5f));
                     holdWarningText.SetActive(false);
                     FindFirstObjectByType<PlayerMovement>().SetCanMove(true);
 
@@ -221,12 +224,56 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
+    IEnumerator EaseFOV(float target, float displacement)
+    {
+        easingFOV = true;
+        float fov = Camera.main.fieldOfView;
+        if (Mathf.Sign(displacement) == -1) // zoom in
+        {
+            while (fov > target)
+            {
+                if (fov + displacement * Time.deltaTime > target)
+                {
+                    fov += displacement * Time.deltaTime;
+                    Camera.main.fieldOfView = fov;
+                    yield return null;
+                }
+                else
+                {
+                    fov = target;
+                    Camera.main.fieldOfView = fov;
+                }
+            }
+            Camera.main.fieldOfView = fov;
+            easingFOV = false;
+        }
+        else // zoom out
+        {
+            while (fov < target)
+            {
+                if (fov + displacement * Time.deltaTime < target)
+                {
+                    fov += displacement * Time.deltaTime;
+                    Camera.main.fieldOfView = fov;
+                    yield return null;
+                }
+                else
+                {
+                    fov = target;
+                    Camera.main.fieldOfView = fov;
+                }
+            }
+            Camera.main.fieldOfView = fov;
+            easingFOV = false;
+        }
+    }
+
     void StartAttack()
     {
         breathTimer = 0;
         CameraControl.instance.ScreenShake(0.3f, 0.15f);
         // set cam fov high
-        Camera.main.fieldOfView = attackCamFOV;
+        StartCoroutine(EaseFOV(attackCamFOV, 130));
         // warn to hold breath
         holdWarningText.SetActive(true);
     }
