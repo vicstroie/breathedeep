@@ -35,7 +35,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] float attackMoveSpeed = 1f;
     [SerializeField] float attackCamFOV = 90;
     [SerializeField] float breathHoldTime = 4.5f;
-    [SerializeField] GameObject holdWarningText;
+    [SerializeField] Animator warningText;
     float breathTimer = 0;
     float defaultCamFOV;
     bool easingFOV = false;
@@ -54,8 +54,6 @@ public class EnemyBehavior : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        holdWarningText.SetActive(false);
-
         agent = GetComponent<NavMeshAgent>();
         fieldOfView = GetComponent<EnemyFieldOfView>();
         player = GameObject.FindGameObjectWithTag("Player");
@@ -84,164 +82,75 @@ public class EnemyBehavior : MonoBehaviour
             player = GameObject.FindGameObjectWithTag("Player");
         }
 
-            /*
-            float fogDelta = 0;
+        /*
+        float fogDelta = 0;
 
 
-            //Debug.Log(playerDistance);
+        //Debug.Log(playerDistance);
 
-            if (playerDistance < minimumFogDistance)
-            { 
-                fogDelta = (1 / playerDistance) + 0.4f;
-            } else
-            {
-                fogDelta = 0.2f;
-            }
-
-
-            if (RenderSettings.fogDensity != fogDelta) RenderSettings.fogDensity = Mathf.MoveTowards(RenderSettings.fogDensity, fogDelta, 2 * Time.deltaTime);
-            */
-
-            switch (currentState)
-            {
-
-                case STATE.SetUp:
+        if (playerDistance < minimumFogDistance)
+        { 
+             fogDelta = (1 / playerDistance) + 0.4f;
+        } else
+        {
+             fogDelta = 0.2f;
+        }
 
 
-                    if (firstWaypoint != null)
+        if (RenderSettings.fogDensity != fogDelta) RenderSettings.fogDensity = Mathf.MoveTowards(RenderSettings.fogDensity, fogDelta, 2 * Time.deltaTime);
+        */
+
+        switch (currentState)
+        {
+
+            case STATE.SetUp:
+
+
+                if (firstWaypoint != null)
+                {
+                    agent.SetDestination(firstWaypoint.position);
+                    agent.isStopped = false;
+                    agent.speed = roamSpeed;
+                }
+
+                if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+                {
+                    SetUpNextState(STATE.Patrol);
+                }
+
+
+
+                break;
+
+            case STATE.Idle:
+
+                //For testing
+                if (Input.GetKeyDown(KeyCode.C))
+                {
+                    currentState = STATE.Chase;
+                }
+
+                idleTimer += Time.deltaTime;
+
+                if (idleTimer > idleTime)
+                {
+                    if (usingWaypoints)
                     {
-                        agent.SetDestination(firstWaypoint.position);
-                        agent.isStopped = false;
-                        agent.speed = roamSpeed;
-                    }
-
-                    if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
-                    {
-                        SetUpNextState(STATE.Patrol);
-                    }
-
-
-
-                    break;
-
-                case STATE.Idle:
-
-                    //For testing
-                    if (Input.GetKeyDown(KeyCode.C))
-                    {
-                        currentState = STATE.Chase;
-                    }
-
-                    idleTimer += Time.deltaTime;
-
-                    if (idleTimer > idleTime)
-                    {
-                        if (usingWaypoints)
+                        if (waypoints.Count > 0)
                         {
-                            if (waypoints.Count > 0)
-                            {
-                                //Will not go to navigation if there are no waypoints and navigation relies on waypoints
-                                SetUpNextState(STATE.Patrol);
-                            }
-                            else
-                            {
-                                //Stops using waypoints if no waypoints are passed in
-                                usingWaypoints = false;
-                            }
+                            //Will not go to navigation if there are no waypoints and navigation relies on waypoints
+                            SetUpNextState(STATE.Patrol);
                         }
                         else
                         {
-                            //Locates a random point in the pre-defined radius to move towards
-                            //MOVED FROM PATROL - NEEDED A WAY TO FIND THE POINT BEFORE IT PATROLS, NEEDED MORE THAN ONE FRAME IN CASE POINT WAS NOT IN NAVMESH
-                            Vector3 point;
-                            if (FindRandomWaypoint(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
-                            {
-                                Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
-                                agent.SetDestination(point);
-
-                                SetUpNextState(STATE.Patrol);
-
-                            }
-                        }
-
-                    }
-
-                    break;
-                case STATE.Patrol:
-
-                    if (usingWaypoints)
-                    {
-                        //Make agent walk to next patrol point
-                        agent.SetDestination(waypoints[currentWaypoint].position);
-
-                        //Goes back into idle once it reaches its destination
-                        if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
-                        {
-
-                            //Will move to next waypoint next time it enters the patrol state
-                            currentWaypoint++;
-                            if (currentWaypoint > waypoints.Count - 1) currentWaypoint = 0;
-
-                            SetUpNextState(STATE.Idle);
+                            //Stops using waypoints if no waypoints are passed in
+                            usingWaypoints = false;
                         }
                     }
                     else
                     {
-                        if (agent.remainingDistance <= agent.stoppingDistance) //done with path
-                        {
-                            //Go back to idle once waypoint is reached
-                            SetUpNextState(STATE.Idle);
-                        }
-                    }
-
-                    if (playerDistance < attackRange)
-                    {
-                        SetUpNextState(STATE.Attack);
-                    }
-
-                    break;
-                case STATE.Chase:
-
-                    agent.SetDestination(player.transform.position);
-
-                    if (playerDistance < attackRange)
-                    {
-                        SetUpNextState(STATE.Attack);
-                    }
-
-                    break;
-                case STATE.Attack:
-                    agent.isStopped = true;
-
-                    float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime - 0.5f;
-                    float abbRate = 1 / breathHoldTime;
-                    float vignetteRate = 0.25f / breathHoldTime;
-
-                    // zoom in and ease chromatic aberration as holding breath
-                    if (!easingFOV)
-                    {
-                        Camera.main.fieldOfView -= fovRate * Time.deltaTime;
-                        PostProcessControl.instance.aberrationIntesity -= abbRate * Time.deltaTime;
-                        PostProcessControl.instance.vignetteIntensity -= vignetteRate * Time.deltaTime;
-                    }
-
-                    // count up
-                    if (breathTimer < breathHoldTime)
-                    {
-                        breathTimer += Time.deltaTime;
-                    }
-                    else
-                    {
-                        // resume normal movement and player state
-                        StartCoroutine(EaseFOV(defaultCamFOV, -5.5f));
-                        PostProcessControl.instance.aberrationIntesity = 0;
-                        PostProcessControl.instance.vignetteIntensity = PostProcessControl.instance.defaultVignette;
-                        holdWarningText.SetActive(false);
-                        FindFirstObjectByType<PlayerMovement>().SetCanMove(true);
-
-                        // FOR VICTOR
-                        // monster should walk away/retreat/etc
-                        // maybe go back to a waypoint and start patrolling again?
+                        //Locates a random point in the pre-defined radius to move towards
+                        //MOVED FROM PATROL - NEEDED A WAY TO FIND THE POINT BEFORE IT PATROLS, NEEDED MORE THAN ONE FRAME IN CASE POINT WAS NOT IN NAVMESH
                         Vector3 point;
                         if (FindRandomWaypoint(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
                         {
@@ -253,16 +162,106 @@ public class EnemyBehavior : MonoBehaviour
                         }
                     }
 
-                    // if close enough, kill
-                    if (agent.remainingDistance < agent.stoppingDistance && !agent.pathPending)
-                    {
-                        Debug.Log("You lost");
-                        SceneManager.LoadScene("Death");
-                    }
+                }
 
-                    
-                    break;
-            }
+                break;
+            case STATE.Patrol:
+
+                if (usingWaypoints)
+                {
+                    //Make agent walk to next patrol point
+                    agent.SetDestination(waypoints[currentWaypoint].position);
+
+                    //Goes back into idle once it reaches its destination
+                    if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+                    {
+
+                        //Will move to next waypoint next time it enters the patrol state
+                        currentWaypoint++;
+                        if (currentWaypoint > waypoints.Count - 1) currentWaypoint = 0;
+
+                        SetUpNextState(STATE.Idle);
+                    }
+                }
+                else
+                {
+                    if (agent.remainingDistance <= agent.stoppingDistance) //done with path
+                    {
+                        //Go back to idle once waypoint is reached
+                        SetUpNextState(STATE.Idle);
+                    }
+                }
+
+                if (playerDistance < attackRange)
+                {
+                    SetUpNextState(STATE.Attack);
+                }
+
+                break;
+            case STATE.Chase:
+
+                agent.SetDestination(player.transform.position);
+
+                if (playerDistance < attackRange)
+                {
+                    SetUpNextState(STATE.Attack);
+                }
+
+                break;
+            case STATE.Attack:
+                agent.isStopped = true;
+
+                float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime - 0.5f;
+                float abbRate = 1 / breathHoldTime;
+                float vignetteRate = 0.25f / breathHoldTime;
+
+                // zoom in and ease chromatic aberration as holding breath
+                if (!easingFOV)
+                {
+                    Camera.main.fieldOfView -= fovRate * Time.deltaTime;
+                    PostProcessControl.instance.aberrationIntesity -= abbRate * Time.deltaTime;
+                    PostProcessControl.instance.vignetteIntensity -= vignetteRate * Time.deltaTime;
+                }
+
+                // count up
+                if (breathTimer < breathHoldTime)
+                {
+                    breathTimer += Time.deltaTime;
+                }
+                else
+                {
+                    // resume normal movement and player state
+                    StartCoroutine(EaseFOV(defaultCamFOV, -5.5f));
+                    PostProcessControl.instance.aberrationIntesity = 0;
+                    PostProcessControl.instance.vignetteIntensity = PostProcessControl.instance.defaultVignette;
+                    warningText.ResetTrigger("appear");
+                    warningText.SetTrigger("hide");
+                    FindFirstObjectByType<PlayerMovement>().SetCanMove(true);
+
+                    // FOR VICTOR
+                    // monster should walk away/retreat/etc
+                    // maybe go back to a waypoint and start patrolling again?
+                    Vector3 point;
+                    if (FindRandomWaypoint(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
+                    {
+                        Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
+                        agent.SetDestination(point);
+
+                        SetUpNextState(STATE.Patrol);
+
+                    }
+                }
+
+                // if close enough, kill
+                if (agent.remainingDistance < agent.stoppingDistance && !agent.pathPending)
+                {
+                    Debug.Log("You lost");
+                    SceneManager.LoadScene("Death");
+                }
+
+
+                break;
+        }
 
         //AudioManager.instance.ChangeMonsterDistanceParameter(playerDistance);
         //AudioManager.instance.ChangeMonsterDirectionParameter(Vector3.Angle(player.transform.position, transform.position));
@@ -278,6 +277,7 @@ public class EnemyBehavior : MonoBehaviour
             agent.isStopped = false;
             agent.speed = stalkSpeed;
 
+            warningText.ResetTrigger("appear");
 
             // FOR VICTOR
             // monster should inch closer, not sure what best way to do that is, i never use navmesh lol
@@ -325,6 +325,7 @@ public class EnemyBehavior : MonoBehaviour
             }
             Camera.main.fieldOfView = fov;
             easingFOV = false;
+            CameraControl.instance.ScreenShake(3.5f, 0.025f, true);
         }
     }
 
@@ -338,7 +339,7 @@ public class EnemyBehavior : MonoBehaviour
         PostProcessControl.instance.aberrationIntesity = 1;
         PostProcessControl.instance.vignetteIntensity = 0.45f;
         // warn to hold breath
-        holdWarningText.SetActive(true);
+        warningText.SetTrigger("appear");
 
         AudioManager.instance.PlayPlayerHit();
     }

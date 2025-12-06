@@ -52,6 +52,11 @@ public class BreathReader : MonoBehaviour
     public float CurrentADC { get { return sensorADC; } }
     public float CurrentSample { get { return currentSample; } }
     public Queue<float> StoredSamples { get { return samples; } }
+    public float SensThreshold
+    {
+        get { return sensThreshold; }
+        set { sensThreshold = value; }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

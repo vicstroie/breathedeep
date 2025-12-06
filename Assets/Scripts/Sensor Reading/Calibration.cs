@@ -42,6 +42,12 @@ public class Calibration : MonoBehaviour
 
     BreathReader reader;
 
+    [Header("Sensitivity Adjustment")]
+    [SerializeField] float adjustmentSpeed = 0.5f;
+    [SerializeField] RectTransform sensSlider;
+    float defaultSens;
+    float currentSens;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -53,22 +59,32 @@ public class Calibration : MonoBehaviour
 
         StartCoroutine(FadeText(false, "adjust the tightness of the harness", 1));
         timerImageScaleSpeed = 1 / adjustTimeToHold;
+
+        defaultSens = reader.SensThreshold;
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch(state)
+        StrapAdjustment();
+
+        if (Mathf.Abs(PedalInput.InputValue) > 0)
         {
-            case CALIB_STATE.STRAP_ADJUST:
-                StrapAdjustment();
-                break;
-            case CALIB_STATE.MAX:
-                MinMax();
-                break;
-            case CALIB_STATE.SENS:
-                break;
-        }        
+            currentSens += PedalInput.InputValue * Time.deltaTime;
+            reader.SensThreshold = currentSens;
+        }
+
+        //switch(state)
+        //{
+        //    case CALIB_STATE.STRAP_ADJUST:
+        //        StrapAdjustment();
+        //        break;
+        //    case CALIB_STATE.MAX:
+        //        MinMax();
+        //        break;
+        //    case CALIB_STATE.SENS:
+        //        break;
+        //}        
     }
 
     void NextState()
@@ -126,21 +142,23 @@ public class Calibration : MonoBehaviour
         float xPos = -sliderBound + (sliderBound * 2 * idleNormalized);
         slider.anchoredPosition = new Vector2(xPos, slider.anchoredPosition.y);
 
-        if (sample > idleLower && sample < idleUpper)
-        {
-            adjustTimer += Time.deltaTime;
-            timerImage.localScale += new Vector3(timerImageScaleSpeed * Time.deltaTime, timerImageScaleSpeed * Time.deltaTime, timerImageScaleSpeed * Time.deltaTime);
-        }
-        else
-        {
-            adjustTimer = 0;
-            timerImage.localScale = Vector3.zero;
-        }
 
-        if (adjustTimer >= adjustTimeToHold)
-        {
-            NextState();
-        }
+
+        //if (sample > idleLower && sample < idleUpper)
+        //{
+        //    adjustTimer += Time.deltaTime;
+        //    timerImage.localScale += new Vector3(timerImageScaleSpeed * Time.deltaTime, timerImageScaleSpeed * Time.deltaTime, timerImageScaleSpeed * Time.deltaTime);
+        //}
+        //else
+        //{
+        //    adjustTimer = 0;
+        //    timerImage.localScale = Vector3.zero;
+        //}
+
+        //if (adjustTimer >= adjustTimeToHold)
+        //{
+        //    NextState();
+        //}
 
         if (sample < sampleMin) { sampleMin = sample; }
     }
