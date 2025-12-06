@@ -140,7 +140,10 @@ public class BreathReader : MonoBehaviour
             // so it only procs once
             if (!breatheIn)
             {
-                if (currentSample > samples.Peek() && currentSample - samples.Peek() >= sensThreshold)
+                float sampleDiff = currentSample - samples.Peek();
+                bool pastThreshold = sampleDiff >= sensThreshold;
+                bool withinRange = sampleDiff <= sensThreshold * 2.5f; // to make sure a random spike doesn't trigger breath
+                if (currentSample > samples.Peek() && pastThreshold && withinRange)
                 {
                     if (debug) { inValueText.text = "In value: " + currentSample.ToString(); }
                     breatheIn = true;
