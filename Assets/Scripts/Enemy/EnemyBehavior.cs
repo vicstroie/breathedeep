@@ -17,6 +17,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] float stalkSpeed;
 
     [Header("External Components")]
+    [SerializeField] Animator anim;
     [SerializeField] Transform target;
     Transform firstWaypoint;
     GameObject player;
@@ -347,9 +348,20 @@ public class EnemyBehavior : MonoBehaviour
     //Put set ups for states here
     void SetUpNextState(STATE nextState)
     {
-        switch(nextState)
+        anim.ResetTrigger("isWalking");
+        anim.ResetTrigger("isIdle");
+
+        switch (nextState)
         {
+            case STATE.SetUp:
+
+                anim.SetTrigger("isWalking");
+
+                break;
+
             case STATE.Idle:
+
+                anim.SetTrigger("isIdle");
 
                 idleTimer = 0;
                 agent.isStopped = true;
@@ -357,12 +369,16 @@ public class EnemyBehavior : MonoBehaviour
                 break;
             case STATE.Patrol:
 
+                anim.SetTrigger("isWalking");
+
                 agent.isStopped = false;
 
                 agent.speed = roamSpeed;
 
                 break;
             case STATE.Chase:
+
+                anim.SetTrigger("isWalking");
 
                 agent.isStopped = false;
 
@@ -372,6 +388,9 @@ public class EnemyBehavior : MonoBehaviour
 
                 break;
             case STATE.Attack:
+
+                anim.SetTrigger("isWalking");
+
                 StartAttack();
                 FindFirstObjectByType<PlayerMovement>().SetCanMove(false);
                 break;
