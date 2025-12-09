@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4312041583625129177}
   - component: {fileID: 4391904200151693588}
   - component: {fileID: 5320609769103479042}
-  - component: {fileID: 1033767440048990212}
   - component: {fileID: 649804071449082815}
   m_Layer: 3
   m_Name: Player
@@ -115,18 +114,6 @@ MonoBehaviour:
   visionDebugger: {fileID: 0}
   hintCubePrefab: {fileID: 6127566756758003885, guid: 12c7816094b824c46aba3a27c281a5c7, type: 3}
   gameManager: {fileID: 0}
---- !u!114 &1033767440048990212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4099547436372127183}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef3e56a11d1c0714caae2f26adb99dc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!143 &649804071449082815
 CharacterController:
   m_ObjectHideFlags: 0

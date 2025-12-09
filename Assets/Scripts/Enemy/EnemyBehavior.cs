@@ -10,6 +10,7 @@ public class EnemyBehavior : MonoBehaviour
 
     [Header("Attributes")]
     [SerializeField] float stoppingDistance;
+    [SerializeField] float minimumChaseDistance;
     [SerializeField] float idleTime;
     float idleTimer;
     [SerializeField] float roamSpeed;
@@ -27,6 +28,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] List<Transform> waypoints;
     int currentWaypoint;
     [SerializeField] float waypointRadius;
+    
 
     [Header("Visual Feedback")]
     [SerializeField] float minimumFogDistance;
@@ -165,6 +167,12 @@ public class EnemyBehavior : MonoBehaviour
 
                 }
 
+                if (playerDistance < attackRange || fieldOfView.canSeePlayer)
+                {
+                    SetUpNextState(STATE.Attack);
+                }
+
+
                 break;
             case STATE.Patrol:
 
@@ -193,7 +201,7 @@ public class EnemyBehavior : MonoBehaviour
                     }
                 }
 
-                if (playerDistance < attackRange)
+                if (fieldOfView.canSeePlayer)
                 {
                     SetUpNextState(STATE.Attack);
                 }
@@ -203,15 +211,34 @@ public class EnemyBehavior : MonoBehaviour
 
                 agent.SetDestination(player.transform.position);
 
-                if (playerDistance < attackRange)
+                Debug.Log(agent.remainingDistance + " " + agent.stoppingDistance);
+
+                // if close enough, kill
+                if (agent.remainingDistance < 0.2f && !agent.pathPending)
                 {
-                    SetUpNextState(STATE.Attack);
+                    Debug.Log("You lost");
+                    SceneManager.LoadScene("Death");
                 }
 
-                break;
-            case STATE.Attack:
-                agent.isStopped = true;
+                //Leave player alone if it gets far enough away
+                if(!fieldOfView.canSeePlayer && agent.remainingDistance > minimumChaseDistance && !agent.pathPending)
+                {
+                    //Locates a random point in the pre-defined radius to move towards
+                    //MOVED FROM PATROL - NEEDED A WAY TO FIND THE POINT BEFORE IT PATROLS, NEEDED MORE THAN ONE FRAME IN CASE POINT WAS NOT IN NAVMESH
+                    Vector3 point;
+                    if (FindRandomWaypoint(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
+                    {
+                        Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
+                        agent.SetDestination(point);
 
+                        SetUpNextState(STATE.Patrol);
+
+                    }
+                }
+                break;
+
+            case STATE.Attack:
+                
                 float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime - 0.5f;
                 float abbRate = 1 / breathHoldTime;
                 float vignetteRate = 0.25f / breathHoldTime;
@@ -243,21 +270,24 @@ public class EnemyBehavior : MonoBehaviour
                     // monster should walk away/retreat/etc
                     // maybe go back to a waypoint and start patrolling again?
                     Vector3 point;
-                    if (FindRandomWaypoint(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
+                    if (FindRandomWaypointBehind(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
                     {
                         Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
                         agent.SetDestination(point);
 
-                        SetUpNextState(STATE.Patrol);
+                        transform.Rotate(0, 180, 0);
+                        fieldOfView.canSeePlayer = false;
 
+                        SetUpNextState(STATE.Patrol);
                     }
                 }
 
-                // if close enough, kill
-                if (agent.remainingDistance < agent.stoppingDistance && !agent.pathPending)
+                
+
+
+                if(Input.GetKeyDown(KeyCode.Y))
                 {
-                    Debug.Log("You lost");
-                    SceneManager.LoadScene("Death");
+                    BreakBreathHold();
                 }
 
 
@@ -273,12 +303,22 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (currentState == STATE.Attack)
         {
+            /*
             StartAttack();
 
             agent.isStopped = false;
             agent.speed = stalkSpeed;
+            anim.SetTrigger("isWalking");
 
             warningText.ResetTrigger("appear");
+            */
+
+            // resume normal movement and player state
+            StartCoroutine(EaseFOV(defaultCamFOV, -5.5f));
+            PostProcessControl.instance.aberrationIntesity = 0;
+            PostProcessControl.instance.vignetteIntensity = PostProcessControl.instance.defaultVignette;
+
+            SetUpNextState(STATE.Chase);
 
             // FOR VICTOR
             // monster should inch closer, not sure what best way to do that is, i never use navmesh lol
@@ -389,7 +429,8 @@ public class EnemyBehavior : MonoBehaviour
                 break;
             case STATE.Attack:
 
-                anim.SetTrigger("isWalking");
+                agent.isStopped = true;
+                anim.SetTrigger("isIdle");
 
                 StartAttack();
                 FindFirstObjectByType<PlayerMovement>().SetCanMove(false);
@@ -406,7 +447,32 @@ public class EnemyBehavior : MonoBehaviour
         {
             Vector3 randomPoint = center + Random.insideUnitSphere * range; //random point in a sphere 
             NavMeshHit hit;
+
             if (NavMesh.SamplePosition(randomPoint, out hit, 8f, NavMesh.AllAreas)) //documentation: https://docs.unity3d.com/ScriptReference/AI.NavMesh.SamplePosition.html
+            {
+                //the 1.0f is the max distance from the random point to a point on the navmesh, might want to increase if range is big
+                //or add a for loop like in the documentation
+                result = hit.position;
+                return true;
+            }
+        }
+
+        result = Vector3.zero;
+        return false;
+    }
+
+    bool FindRandomWaypointBehind(Vector3 center, float range, out Vector3 result)
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            Vector3 randomPoint = center + Random.insideUnitSphere * range; //random point in a sphere 
+            NavMeshHit hit;
+
+            Vector3 directionToWaypoint = (randomPoint - transform.position).normalized;
+
+            //Checks if point is behind enemy
+            if (NavMesh.SamplePosition(randomPoint, out hit, 8f, NavMesh.AllAreas) 
+                && Vector3.Dot(directionToWaypoint, transform.forward) < 0) //documentation: https://docs.unity3d.com/ScriptReference/AI.NavMesh.SamplePosition.html
             {
                 //the 1.0f is the max distance from the random point to a point on the navmesh, might want to increase if range is big
                 //or add a for loop like in the documentation

@@ -22,8 +22,6 @@ public class HintFollower : MonoBehaviour
     void Update()
     {
 
-        Debug.Log(agent.speed + " " + agent.velocity.magnitude);
-
         lifeTimer += Time.deltaTime;
         spawnTimer += Time.deltaTime;
 
