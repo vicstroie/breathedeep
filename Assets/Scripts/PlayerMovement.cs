@@ -8,9 +8,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float correctionSpeed;
     [SerializeField] float checkDistance;
     [SerializeField] LayerMask groundMask;
-    [SerializeField] float turnSpeed = 5f;
+    [SerializeField] float turnSpeed = 55f;
     [Tooltip("How long to wait before starting to turn again after hitting a 90 degree increment")]
     [SerializeField] float turnBufferTime = 0.5f;
+    [Tooltip("How long to hold your breath to spawn a hint")]
+    [SerializeField] float hintHoldTime = 4f;
 
     CharacterController controller;
     [HideInInspector] public float moveSpeed;
@@ -20,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject visionDebugger;
     [SerializeField] GameObject hintCubePrefab;
     [SerializeField] GameManager gameManager;
+    BreathReader reader;
 
     float trueZeroRot; // the rotation at Start(), get's added to internal currentRot
     float nextTurnTarget = 90; // stores the next increment of 90
@@ -39,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         isSearching = true;
         trueZeroRot = transform.eulerAngles.y;
+        reader = FindFirstObjectByType<BreathReader>();
     }
 
     // Update is called once per frame
@@ -111,6 +115,12 @@ public class PlayerMovement : MonoBehaviour
             newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
         }
 
+        // NEED TO TEST
+        if (reader.HoldingTime >= hintHoldTime)
+        {
+            GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
+            newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
+        }
 
         if (isMoving)
         {

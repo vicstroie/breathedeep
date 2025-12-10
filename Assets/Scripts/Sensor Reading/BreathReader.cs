@@ -49,6 +49,8 @@ public class BreathReader : MonoBehaviour
     float currentSample;
     float lastBreath; // the value of the sample at the last breathe in
 
+    float holdingTime = 0; // time since the last state change
+
     public float CurrentADC { get { return sensorADC; } }
     public float CurrentSample { get { return currentSample; } }
     public Queue<float> StoredSamples { get { return samples; } }
@@ -57,6 +59,8 @@ public class BreathReader : MonoBehaviour
         get { return sensThreshold; }
         set { sensThreshold = value; }
     }
+
+    public float HoldingTime { get { return holdingTime; } }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -102,6 +106,8 @@ public class BreathReader : MonoBehaviour
             if (breatheIn) { bg.color = Color.green; }
             else { bg.color = red; }
         }
+
+        holdingTime += Time.deltaTime;
     }
 
     public void OnMessageArrived(string msg)
@@ -148,6 +154,7 @@ public class BreathReader : MonoBehaviour
                     onBreatheIn.Invoke();
                     onStateChange.Invoke();
                     //Debug.Log("breathe in");
+                    holdingTime = 0;
                 }
             }
             else
@@ -157,6 +164,7 @@ public class BreathReader : MonoBehaviour
                     breatheIn = false; onBreatheOut.Invoke();
                     onStateChange.Invoke();
                     //Debug.Log("breathe out");
+                    holdingTime = 0;
                 }
             }
 

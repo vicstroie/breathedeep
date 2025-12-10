@@ -313,10 +313,15 @@ public class EnemyBehavior : MonoBehaviour
             warningText.ResetTrigger("appear");
             */
 
+            CameraControl.instance.ScreenShake(0.3f, 0.15f);
+
             // resume normal movement and player state
             StartCoroutine(EaseFOV(defaultCamFOV, -5.5f));
             PostProcessControl.instance.aberrationIntesity = 0;
             PostProcessControl.instance.vignetteIntensity = PostProcessControl.instance.defaultVignette;
+            warningText.ResetTrigger("appear");
+            warningText.SetTrigger("hide");
+            FindFirstObjectByType<PlayerMovement>().SetCanMove(true);
 
             SetUpNextState(STATE.Chase);
 
