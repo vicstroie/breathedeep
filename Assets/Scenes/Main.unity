@@ -16514,7 +16514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 038daba82599a7e4e97aae9e228692aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockedDoorTransform: {fileID: 0}
+  lockedDoorTransform: {fileID: 2038037316}
   lockedDoor: {fileID: 2018985876}
   gameManager: {fileID: 1121427938}
   trigger: {fileID: 239990436}
@@ -20095,6 +20095,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 973d18ddab6f6ce4fb94a111b11a2b42, type: 3}
+--- !u!4 &2038037316 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 973d18ddab6f6ce4fb94a111b11a2b42, type: 3}
+  m_PrefabInstance: {fileID: 2038037315}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2049777193
 PrefabInstance:
   m_ObjectHideFlags: 0
