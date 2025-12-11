@@ -3,6 +3,7 @@ using UnityEngine;
 public class KeyBehavior : MonoBehaviour
 {
     [Header("Other")]
+    [SerializeField] Transform lockedDoorTransform;
     [SerializeField] LockedDoor lockedDoor;
     [SerializeField] GameManager gameManager;
     [SerializeField] EnemySpawnTrigger trigger;
@@ -24,7 +25,7 @@ public class KeyBehavior : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
         {
             lockedDoor.isUnlocked = true;
-            gameManager.SetCurrentGoal(lockedDoor.transform);
+            gameManager.SetCurrentGoal(lockedDoorTransform);
             trigger.gameObject.SetActive(true);
 
             AudioManager.instance.PlayKeyPickup();
