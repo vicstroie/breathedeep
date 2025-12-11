@@ -25,8 +25,8 @@ public class BreathReader : MonoBehaviour
     [SerializeField] TMP_Text minMaxText;
     [SerializeField] TMP_Text inValueText;
     [SerializeField] Image bg;
-    [SerializeField] Color32 inColor;
-    [SerializeField] Color32 outColor;
+    [SerializeField] Color inColor;
+    [SerializeField] Color outColor;
 
     [Space(10)]
     [SerializeField] KeyCode calibrateKey = KeyCode.Space;
@@ -76,6 +76,7 @@ public class BreathReader : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log(sensThreshold);
             lastBreath = 0;
             breatheIn = false;
         }
@@ -174,6 +175,11 @@ public class BreathReader : MonoBehaviour
         }
 
         lastReading = sensorADC;
+    }
+
+    public void ResetHoldingTime()
+    {
+        holdingTime = 0;
     }
 
     void OnConnectionEvent(bool success)

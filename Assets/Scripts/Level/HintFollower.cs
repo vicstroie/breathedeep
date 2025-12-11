@@ -33,6 +33,7 @@ public class HintFollower : MonoBehaviour
 
         if (lifeTimer > lifeTime)
         {
+            FindFirstObjectByType<PlayerMovement>().hintActive = false;
             Destroy(this.gameObject);
         }
     }

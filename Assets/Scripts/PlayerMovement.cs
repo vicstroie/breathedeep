@@ -36,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
     bool isSearching;
     bool isTurning;
 
+    [HideInInspector] public bool hintActive = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -117,11 +119,13 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // NEED TO TEST
-        //if (reader.HoldingTime >= hintHoldTime)
-        //{
-        //    GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
-        //    newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
-        //}
+        if (reader.HoldingTime >= hintHoldTime && !hintActive)
+        {
+            hintActive = true;
+            reader.ResetHoldingTime();
+            GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
+            newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
+        }
 
         if (isMoving)
         {

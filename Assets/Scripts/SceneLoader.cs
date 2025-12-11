@@ -50,11 +50,6 @@ public class SceneLoader : MonoBehaviour
         blackout.color = new Color(c.r, c.g, c.b, 1);
         SceneManager.LoadScene(index);
 
-        if (SceneManager.GetActiveScene().name == "Main")
-        {
-            FindFirstObjectByType<BreathReader>().SensThreshold = calibrationSens;
-        }
-
         while (a > 0)
         {
             a -= fadeSpeed * Time.deltaTime;
@@ -62,5 +57,9 @@ public class SceneLoader : MonoBehaviour
             yield return null;
         }
         blackout.color = new Color(c.r, c.g, c.b, 0);
+        if (index == 2)
+        {
+            FindFirstObjectByType<BreathReader>().SensThreshold = calibrationSens;
+        }
     }
 }
