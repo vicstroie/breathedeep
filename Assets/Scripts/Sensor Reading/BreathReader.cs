@@ -23,11 +23,10 @@ public class BreathReader : MonoBehaviour
     [SerializeField] TMP_Text adcText;
     [SerializeField] TMP_Text avgText;
     [SerializeField] TMP_Text minMaxText;
-    [SerializeField] GameObject calibratingText;
     [SerializeField] TMP_Text inValueText;
     [SerializeField] Image bg;
-    [SerializeField] Color inColor;
-    [SerializeField] Color outColor;
+    [SerializeField] Color32 inColor;
+    [SerializeField] Color32 outColor;
 
     [Space(10)]
     [SerializeField] KeyCode calibrateKey = KeyCode.Space;
@@ -66,7 +65,7 @@ public class BreathReader : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (debug) { red = bg.color; }
+        
     }
 
     // Update is called once per frame
