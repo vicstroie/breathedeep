@@ -64,7 +64,7 @@ public class MenuControl : MonoBehaviour
             {
                 if (selectTimer < minHoldTime)
                 {
-                    SelectNextButton();
+                    //SelectNextButton();
                 }
             }
             selectTimer = 0;

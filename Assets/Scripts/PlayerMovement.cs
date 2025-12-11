@@ -89,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            stepCounter = 3;
+            MovePlayer();
         }
 
         if (MicrophoneInput.MicLoudness > 0.5f)
@@ -116,11 +116,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // NEED TO TEST
-        if (reader.HoldingTime >= hintHoldTime)
-        {
-            GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
-            newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
-        }
+        //if (reader.HoldingTime >= hintHoldTime)
+        //{
+        //    GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
+        //    newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
+        //}
 
         if (isMoving)
         {
@@ -236,8 +236,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void MovePlayer()
     {
+        if (currentRot % 90 != 0) { return; }
+        if (isTurning) { return; }
         if (!canMove) { return; }
-        stepCounter = 4;
+        stepCounter = 3;
     }
 
     // used by Unity Events on PedalInput
