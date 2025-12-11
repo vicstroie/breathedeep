@@ -43,6 +43,7 @@ public class Calibration : MonoBehaviour
     BreathReader reader;
 
     [Header("Sensitivity Adjustment")]
+    [SerializeField] Vector2 sensBounds = new Vector2(10, 28);
     [SerializeField] float adjustmentSpeed = 0.5f;
     [SerializeField] RectTransform sensSlider;
     float defaultSens;
@@ -51,6 +52,8 @@ public class Calibration : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
+
         reader = FindFirstObjectByType<BreathReader>();
         idleLower = idleRange - idleBounds;
         idleUpper = idleRange + idleBounds;
@@ -61,6 +64,11 @@ public class Calibration : MonoBehaviour
         timerImageScaleSpeed = 1 / adjustTimeToHold;
 
         defaultSens = reader.SensThreshold;
+        currentSens = defaultSens;
+
+        float sensNormalized = 1 - ((currentSens - sensBounds.x) / (sensBounds.y - sensBounds.x)); // subtract from one to flip around
+        float xPos = -275 + (275 * 2 * sensNormalized);
+        sensSlider.anchoredPosition = new Vector2(xPos, slider.anchoredPosition.y);
     }
 
     // Update is called once per frame
@@ -70,8 +78,17 @@ public class Calibration : MonoBehaviour
 
         if (Mathf.Abs(PedalInput.InputValue) > 0)
         {
-            currentSens += PedalInput.InputValue * Time.deltaTime;
+            currentSens -= PedalInput.InputValue * Time.deltaTime;
             reader.SensThreshold = currentSens;
+
+            float sensNormalized = 1 - ((currentSens - sensBounds.x) / (sensBounds.y - sensBounds.x)); // subtract from one to flip around
+            float xPos = -275 + (275 * 2 * sensNormalized);
+            sensSlider.anchoredPosition = new Vector2(xPos, slider.anchoredPosition.y);
+        }
+       
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            LoadGame();
         }
 
         //switch(state)
@@ -85,6 +102,12 @@ public class Calibration : MonoBehaviour
         //    case CALIB_STATE.SENS:
         //        break;
         //}        
+    }
+
+    void LoadGame()
+    {
+        SceneLoader.instance.CalibrationSens = currentSens;
+        SceneLoader.instance.FadeOutAndLoad(2);
     }
 
     void NextState()

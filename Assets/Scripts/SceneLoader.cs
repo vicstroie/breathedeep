@@ -6,10 +6,16 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
     [SerializeField] Image blackout;
-
     [SerializeField] float fadeSpeed = 0.25f;
 
+    float calibrationSens;
+
     public static SceneLoader instance;
+    public float CalibrationSens
+    {
+        get { return instance.calibrationSens; }
+        set {  instance.calibrationSens = value; }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -43,6 +49,11 @@ public class SceneLoader : MonoBehaviour
         }
         blackout.color = new Color(c.r, c.g, c.b, 1);
         SceneManager.LoadScene(index);
+
+        if (SceneManager.GetActiveScene().name == "Main")
+        {
+            FindFirstObjectByType<BreathReader>().SensThreshold = calibrationSens;
+        }
 
         while (a > 0)
         {
