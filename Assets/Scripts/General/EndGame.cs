@@ -12,9 +12,11 @@ public class EndGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene("Greybox");
-        }
+        if (Input.GetKeyDown(KeyCode.R)) ReloadGame();
+    }
+
+    public void ReloadGame()
+    {
+        SceneLoader.instance.FadeOutAndLoad(0);
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine.AI;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using TMPro;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] float stalkSpeed;
 
     [Header("External Components")]
+    [SerializeField] TextMeshProUGUI warningComponent;
     [SerializeField] Animator anim;
     [SerializeField] Transform target;
     Transform firstWaypoint;
@@ -223,6 +225,10 @@ public class EnemyBehavior : MonoBehaviour
                 //Leave player alone if it gets far enough away
                 if(!fieldOfView.canSeePlayer && agent.remainingDistance > minimumChaseDistance && !agent.pathPending)
                 {
+
+                    warningText.ResetTrigger("appear");
+                    warningText.SetTrigger("hide");
+
                     //Locates a random point in the pre-defined radius to move towards
                     //MOVED FROM PATROL - NEEDED A WAY TO FIND THE POINT BEFORE IT PATROLS, NEEDED MORE THAN ONE FRAME IN CASE POINT WAS NOT IN NAVMESH
                     Vector3 point;
@@ -386,6 +392,7 @@ public class EnemyBehavior : MonoBehaviour
         PostProcessControl.instance.vignetteIntensity = 0.45f;
         // warn to hold breath
         warningText.SetTrigger("appear");
+        warningComponent.text = "HOLD YOUR BREATH";
 
         AudioManager.instance.PlayPlayerHit();
     }
@@ -428,6 +435,9 @@ public class EnemyBehavior : MonoBehaviour
                 agent.isStopped = false;
 
                 agent.speed = chaseSpeed;
+
+                warningText.SetTrigger("appear");
+                warningComponent.text = "RUN";
 
                 if (player == null) player = fieldOfView.playerRef;
 
@@ -500,6 +510,15 @@ public class EnemyBehavior : MonoBehaviour
         if(collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Player is DEAD");
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("You lost");
+            SceneManager.LoadScene("Death");
         }
     }
 }
