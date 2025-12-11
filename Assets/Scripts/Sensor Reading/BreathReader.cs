@@ -26,7 +26,8 @@ public class BreathReader : MonoBehaviour
     [SerializeField] GameObject calibratingText;
     [SerializeField] TMP_Text inValueText;
     [SerializeField] Image bg;
-    Color red;
+    [SerializeField] Color inColor;
+    [SerializeField] Color outColor;
 
     [Space(10)]
     [SerializeField] KeyCode calibrateKey = KeyCode.Space;
@@ -103,8 +104,8 @@ public class BreathReader : MonoBehaviour
 
         if (debug)
         {
-            if (breatheIn) { bg.color = Color.green; }
-            else { bg.color = red; }
+            if (breatheIn) { bg.color = inColor; }
+            else { bg.color = outColor; }
         }
 
         holdingTime += Time.deltaTime;

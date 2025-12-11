@@ -54,17 +54,19 @@ public class PlayerMovement : MonoBehaviour
             if (!isTurning)
             {
                 isTurning = true;
-                if (Mathf.Floor(transform.eulerAngles.y) % 90 == 0) // only if already on a perfect increment
-                {
-                    nextTurnTarget = currentRot + 90 * turnDir;
-                    currentTurn = 0;
-                }
-                else if (turnDir != PedalInput.InputValue) // if not the same as last turn input
+                if (turnDir != PedalInput.InputValue) // if not the same as last turn input
                 {
                     turnDir = PedalInput.InputValue;
                     nextTurnTarget += 90 * turnDir;
                     currentTurn = 90 - currentTurn;
                 }
+
+                if (Mathf.Floor(transform.eulerAngles.y) % 90 == 0) // only if already on a perfect increment
+                {
+                    nextTurnTarget = currentRot + 90 * turnDir;
+                    currentTurn = 0;
+                }
+                
             }
 
             //Debug.Log(currentTurn + turnSpeed * Time.deltaTime);
@@ -238,7 +240,7 @@ public class PlayerMovement : MonoBehaviour
         if (currentRot % 90 != 0) { return; }
         if (isTurning) { return; }
         if (!canMove) { return; }
-        stepCounter = 3;
+        stepCounter = 6;
     }
 
     // used by Unity Events on PedalInput
