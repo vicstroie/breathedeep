@@ -21294,7 +21294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5320609769103479042, guid: e0ac550adfefbe44488b90941569c979, type: 3}
       propertyPath: turnSpeed
-      value: 65
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 5320609769103479042, guid: e0ac550adfefbe44488b90941569c979, type: 3}
       propertyPath: gameManager

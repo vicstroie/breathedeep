@@ -53,18 +53,17 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!isTurning)
             {
-                if (turnDir != PedalInput.InputValue) // if not the same as last turn input
-                {
-                    turnDir = PedalInput.InputValue;
-                    nextTurnTarget += 90 * turnDir;
-                    currentTurn = 90 - currentTurn;
-                }
-                
                 isTurning = true;
                 if (Mathf.Floor(transform.eulerAngles.y) % 90 == 0) // only if already on a perfect increment
                 {
                     nextTurnTarget = currentRot + 90 * turnDir;
                     currentTurn = 0;
+                }
+                else if (turnDir != PedalInput.InputValue) // if not the same as last turn input
+                {
+                    turnDir = PedalInput.InputValue;
+                    nextTurnTarget += 90 * turnDir;
+                    currentTurn = 90 - currentTurn;
                 }
             }
 
