@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // TODO maybe make this on leftdown/rightdown, bc if you swap keys it keeps turning (in the same direction as before)
-        if (PedalInput.Left || PedalInput.Right)
+        if (PedalInput.Left || PedalInput.Right && !isMoving && stepCounter == 0)
         {
             if (!isTurning)
             {
