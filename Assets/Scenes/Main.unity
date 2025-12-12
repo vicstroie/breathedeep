@@ -3990,6 +3990,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4444427872955437552, guid: 49baa52bbb29e08438f330c605cdb149, type: 3}
   m_PrefabInstance: {fileID: 1919999701}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &444072047 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6723626276104785785, guid: 49baa52bbb29e08438f330c605cdb149, type: 3}
+  m_PrefabInstance: {fileID: 1919999701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444072043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8056d58ca08d26a489060503ce390e34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &445872584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16159,7 +16170,7 @@ GameObject:
   - component: {fileID: 1694614240}
   - component: {fileID: 1694614239}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17589,7 +17600,19 @@ MonoBehaviour:
       m_Calls: []
   onStateChange:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 444072047}
+        m_TargetAssemblyTypeName: EnemyBehavior, Assembly-CSharp
+        m_MethodName: BreakBreathHold
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   sampleLength: 15
   sampleFrames: 15
   sensThreshold: 25
@@ -21689,7 +21712,7 @@ PrefabInstance:
       objectReference: {fileID: 1121427938}
     - target: {fileID: 5320609769103479042, guid: e0ac550adfefbe44488b90941569c979, type: 3}
       propertyPath: minHintTime
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5320609769103479042, guid: e0ac550adfefbe44488b90941569c979, type: 3}
       propertyPath: hintHoldTime

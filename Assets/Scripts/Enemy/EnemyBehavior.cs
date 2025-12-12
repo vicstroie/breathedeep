@@ -19,7 +19,6 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] float stalkSpeed;
 
     [Header("External Components")]
-    [SerializeField] TextMeshProUGUI warningComponent;
     [SerializeField] Animator anim;
     [SerializeField] Transform target;
     Transform firstWaypoint;
@@ -283,9 +282,8 @@ public class EnemyBehavior : MonoBehaviour
 
                         transform.Rotate(0, 180, 0);
                         fieldOfView.canSeePlayer = false;
-
-                        SetUpNextState(STATE.Patrol);
                     }
+                    SetUpNextState(STATE.Patrol);
                 }
 
                 
@@ -319,10 +317,11 @@ public class EnemyBehavior : MonoBehaviour
             warningText.ResetTrigger("appear");
             */
 
-            CameraControl.instance.ScreenShake(0.3f, 0.15f);
+            CameraControl.instance.ScreenShake(0.3f, 0.25f);
+            AudioManager.instance.PlayPlayerHit();
 
             // resume normal movement and player state
-            StartCoroutine(EaseFOV(defaultCamFOV, -5.5f));
+            StartCoroutine(EaseFOV(defaultCamFOV, -30f));
             PostProcessControl.instance.aberrationIntesity = 0;
             PostProcessControl.instance.vignetteIntensity = PostProcessControl.instance.defaultVignette;
             warningText.ResetTrigger("appear");
@@ -392,9 +391,12 @@ public class EnemyBehavior : MonoBehaviour
         PostProcessControl.instance.vignetteIntensity = 0.45f;
         // warn to hold breath
         warningText.SetTrigger("appear");
-        warningComponent.text = "HOLD YOUR BREATH";
+        warningText.GetComponent<TMP_Text>().text = "HOLD YOUR BREATH";
 
         AudioManager.instance.PlayPlayerHit();
+
+        FindFirstObjectByType<HintIndicator>().SetShowing(false);
+        FindFirstObjectByType<BreathReader>().ResetHoldingTime();
     }
 
     //Put set ups for states here
@@ -437,7 +439,7 @@ public class EnemyBehavior : MonoBehaviour
                 agent.speed = chaseSpeed;
 
                 warningText.SetTrigger("appear");
-                warningComponent.text = "RUN";
+                warningText.GetComponent<TMP_Text>().text = "RUN";
 
                 if (player == null) player = fieldOfView.playerRef;
 

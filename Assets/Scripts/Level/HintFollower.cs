@@ -34,6 +34,7 @@ public class HintFollower : MonoBehaviour
         if (lifeTimer > lifeTime)
         {
             FindFirstObjectByType<PlayerMovement>().hintActive = false;
+            FindFirstObjectByType<BreathReader>().ResetHoldingTime();
             Destroy(this.gameObject);
         }
     }

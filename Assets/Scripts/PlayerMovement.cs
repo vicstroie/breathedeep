@@ -125,25 +125,28 @@ public class PlayerMovement : MonoBehaviour
             newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
         }
 
-        // start visualizing the hint hold
-        if (reader.HoldingTime >= minHintTime && !hintActive)
+        if (canMove)
         {
-            float fill = reader.HoldingTime / hintHoldTime;
-            hintIndicator.fillValue = fill;
-            hintIndicator.SetShowing(true);
-        }
-        else
-        {
-            hintIndicator.SetShowing(false);
-        }
+            // start visualizing the hint hold
+            if (reader.HoldingTime >= minHintTime && !hintActive)
+            {
+                float fill = reader.HoldingTime / hintHoldTime;
+                hintIndicator.fillValue = fill;
+                hintIndicator.SetShowing(true);
+            }
+            else
+            {
+                hintIndicator.SetShowing(false);
+            }
 
-        if (reader.HoldingTime >= hintHoldTime && !hintActive)
-        {
-            hintIndicator.SetShowing(false);
-            hintActive = true;
-            reader.ResetHoldingTime();
-            GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
-            newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
+            if (reader.HoldingTime >= hintHoldTime && !hintActive)
+            {
+                hintIndicator.SetShowing(false);
+                hintActive = true;
+                reader.ResetHoldingTime();
+                GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
+                newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
+            }
         }
         #endregion
 

@@ -76,7 +76,6 @@ public class BreathReader : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log(sensThreshold);
             lastBreath = 0;
             breatheIn = false;
         }
