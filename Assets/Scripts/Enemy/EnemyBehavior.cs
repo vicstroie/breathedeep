@@ -169,7 +169,7 @@ public class EnemyBehavior : MonoBehaviour
 
                 }
 
-                if (playerDistance < attackRange || fieldOfView.canSeePlayer)
+                if (fieldOfView.canSeePlayer)
                 {
                     SetUpNextState(STATE.Attack);
                 }
@@ -281,7 +281,8 @@ public class EnemyBehavior : MonoBehaviour
                     if (FindRandomWaypointBehind(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
                     {
                         Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
-                        agent.transform.position = point;
+                        //agent.transform.position = point;
+                        agent.SetDestination(point);
 
                         transform.Rotate(0, 180, 0);
                         fieldOfView.canSeePlayer = false;

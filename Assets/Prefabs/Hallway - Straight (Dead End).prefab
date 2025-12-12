@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1411442116536180193}
   - component: {fileID: 586932113394162382}
   - component: {fileID: 2166144944683840108}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 765332815272403609}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1, z: -1.5}
-  m_LocalScale: {x: 4.9997997, y: 3, z: 1}
+  m_LocalPosition: {x: 0.5, y: 2.3425, z: -1.5}
+  m_LocalScale: {x: 4.9997997, y: 5.6850085, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9021690489730027054}
@@ -477,7 +477,7 @@ GameObject:
   - component: {fileID: 8898216532846435022}
   - component: {fileID: 2589067828728214680}
   - component: {fileID: 2007424582543503386}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -493,8 +493,8 @@ Transform:
   m_GameObject: {fileID: 5495185987871446286}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 1, z: 1.5}
-  m_LocalScale: {x: 4.9997997, y: 3, z: 1}
+  m_LocalPosition: {x: 0.5, y: 2.3425, z: 1.5}
+  m_LocalScale: {x: 4.9997997, y: 5.6850085, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9021690489730027054}
@@ -728,7 +728,7 @@ GameObject:
   - component: {fileID: 4101087217085558665}
   - component: {fileID: 1138631713714850738}
   - component: {fileID: 4504143515938727191}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -744,8 +744,8 @@ Transform:
   m_GameObject: {fileID: 8170601612907686944}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 1.0000001, z: 0}
-  m_LocalScale: {x: 1.0002, y: 3, z: 4}
+  m_LocalPosition: {x: -1.5, y: 2.3425, z: 0}
+  m_LocalScale: {x: 1.0002, y: 5.6850085, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9021690489730027054}
