@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
@@ -12,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("How long to wait before starting to turn again after hitting a 90 degree increment")]
     [SerializeField] float turnBufferTime = 0.5f;
     [Tooltip("How long to hold your breath to spawn a hint")]
-    [SerializeField] float hintHoldTime = 4f;
 
     CharacterController controller;
     [HideInInspector] public float moveSpeed;
@@ -20,9 +20,14 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("External Objects")]
     [SerializeField] GameObject visionDebugger;
-    [SerializeField] GameObject hintCubePrefab;
     [SerializeField] GameManager gameManager;
     BreathReader reader;
+    HintIndicator hintIndicator;
+
+    [Header("Hint")]
+    [SerializeField] GameObject hintCubePrefab;
+    [SerializeField] float hintHoldTime = 4f;
+    [SerializeField] float minHintTime = 1f; // when to start visualizing the hold indicator
 
     float trueZeroRot; // the rotation at Start(), get's added to internal currentRot
     float nextTurnTarget = 90; // stores the next increment of 90
@@ -45,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
         isSearching = true;
         trueZeroRot = transform.eulerAngles.y;
         reader = FindFirstObjectByType<BreathReader>();
+        hintIndicator = FindFirstObjectByType<HintIndicator>();
     }
 
     // Update is called once per frame
@@ -112,20 +118,34 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        #region HINT ACTIVATION
         if (Input.GetKeyDown(KeyCode.U))
         {
             GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
             newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
         }
 
-        // NEED TO TEST
+        // start visualizing the hint hold
+        if (reader.HoldingTime >= minHintTime && !hintActive)
+        {
+            float fill = reader.HoldingTime / hintHoldTime;
+            hintIndicator.fillValue = fill;
+            hintIndicator.SetShowing(true);
+        }
+        else
+        {
+            hintIndicator.SetShowing(false);
+        }
+
         if (reader.HoldingTime >= hintHoldTime && !hintActive)
         {
+            hintIndicator.SetShowing(false);
             hintActive = true;
             reader.ResetHoldingTime();
             GameObject newCube = Instantiate(hintCubePrefab, visionDebugger.transform.position + Vector3.down, Quaternion.identity);
             newCube.GetComponent<NavMeshAgent>().SetDestination(gameManager.currentGoal.position);
         }
+        #endregion
 
         if (isMoving)
         {
