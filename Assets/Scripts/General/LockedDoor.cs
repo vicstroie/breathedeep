@@ -24,6 +24,7 @@ public class LockedDoor : MonoBehaviour
         if (isUnlocked)
         {
             Debug.Log("You survived!");
+            SceneLoader.instance.FadeOutAndLoad(3);
         } else
         {
             Debug.Log("Need KEY");

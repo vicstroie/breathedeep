@@ -41,6 +41,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] float breathHoldTime = 4.5f;
     [SerializeField] Animator warningText;
     float breathTimer = 0;
+    float attackCheckTimer = 0; // so you have a little time before it checks for breath hold break
     float defaultCamFOV;
     bool easingFOV = false;
 
@@ -243,7 +244,9 @@ public class EnemyBehavior : MonoBehaviour
                 break;
 
             case STATE.Attack:
-                
+
+                attackCheckTimer += Time.deltaTime;
+
                 float fovRate = (attackCamFOV - defaultCamFOV) / breathHoldTime - 0.5f;
                 float abbRate = 1 / breathHoldTime;
                 float vignetteRate = 0.25f / breathHoldTime;
@@ -278,7 +281,7 @@ public class EnemyBehavior : MonoBehaviour
                     if (FindRandomWaypointBehind(player.transform.position, waypointRadius, out point)) //pass in our centre point and radius of area
                     {
                         Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f); //so you can see with gizmos
-                        agent.SetDestination(point);
+                        agent.transform.position = point;
 
                         transform.Rotate(0, 180, 0);
                         fieldOfView.canSeePlayer = false;
@@ -305,7 +308,7 @@ public class EnemyBehavior : MonoBehaviour
     // called by BreathReader OnStateChange unity event
     public void BreakBreathHold()
     {
-        if (currentState == STATE.Attack)
+        if (currentState == STATE.Attack && attackCheckTimer > 0.85f)
         {
             /*
             StartAttack();
@@ -383,6 +386,7 @@ public class EnemyBehavior : MonoBehaviour
     void StartAttack()
     {
         breathTimer = 0;
+        attackCheckTimer = 0;
         CameraControl.instance.ScreenShake(0.3f, 0.15f);
         // set cam fov high
         StartCoroutine(EaseFOV(attackCamFOV, 145));
@@ -397,6 +401,7 @@ public class EnemyBehavior : MonoBehaviour
 
         FindFirstObjectByType<HintIndicator>().SetShowing(false);
         FindFirstObjectByType<BreathReader>().ResetHoldingTime();
+
     }
 
     //Put set ups for states here

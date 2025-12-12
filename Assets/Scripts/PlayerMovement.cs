@@ -57,42 +57,42 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // TODO maybe make this on leftdown/rightdown, bc if you swap keys it keeps turning (in the same direction as before)
-        if (PedalInput.Left || PedalInput.Right && !isMoving && stepCounter == 0)
-        {
-            if (!isTurning)
-            {
-                isTurning = true;
-                if (turnDir != PedalInput.InputValue) // if not the same as last turn input
-                {
-                    turnDir = PedalInput.InputValue;
-                    nextTurnTarget += 90 * turnDir;
-                    currentTurn = 90 - currentTurn;
-                }
+        //if (PedalInput.Left || PedalInput.Right && !isMoving && stepCounter == 0)
+        //{
+        //    if (!isTurning)
+        //    {
+        //        isTurning = true;
+        //        if (turnDir != PedalInput.InputValue) // if not the same as last turn input
+        //        {
+        //            turnDir = PedalInput.InputValue;
+        //            nextTurnTarget += 90 * turnDir;
+        //            currentTurn = 90 - currentTurn;
+        //        }
 
-                if (Mathf.Floor(transform.eulerAngles.y) % 90 == 0) // only if already on a perfect increment
-                {
-                    nextTurnTarget = currentRot + 90 * turnDir;
-                    currentTurn = 0;
-                }
+        //        if (Mathf.Floor(transform.eulerAngles.y) % 90 == 0) // only if already on a perfect increment
+        //        {
+        //            nextTurnTarget = currentRot + 90 * turnDir;
+        //            currentTurn = 0;
+        //        }
                 
-            }
+        //    }
 
-            //Debug.Log(currentTurn + turnSpeed * Time.deltaTime);
-            if (currentTurn + turnSpeed * Time.deltaTime >= 90)
-            {
-                // reached an increment
-                currentRot = nextTurnTarget;
-                transform.eulerAngles = new Vector3(0, trueZeroRot + currentRot, 0);
-                return;
-            }
-            currentRot += turnSpeed * Time.deltaTime * turnDir;
-            currentTurn += turnSpeed * Time.deltaTime;
-            transform.eulerAngles = new Vector3(0, trueZeroRot + currentRot, 0);
-        }
-        else
-        {
-            isTurning = false;
-        }
+        //    //Debug.Log(currentTurn + turnSpeed * Time.deltaTime);
+        //    if (currentTurn + turnSpeed * Time.deltaTime >= 90)
+        //    {
+        //        // reached an increment
+        //        currentRot = nextTurnTarget;
+        //        transform.eulerAngles = new Vector3(0, trueZeroRot + currentRot, 0);
+        //        return;
+        //    }
+        //    currentRot += turnSpeed * Time.deltaTime * turnDir;
+        //    currentTurn += turnSpeed * Time.deltaTime;
+        //    transform.eulerAngles = new Vector3(0, trueZeroRot + currentRot, 0);
+        //}
+        //else
+        //{
+        //    isTurning = false;
+        //}
 
         //moveSpeed = MicrophoneInput.MicLoudness * maxMoveSpeed;
 

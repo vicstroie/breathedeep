@@ -28,7 +28,7 @@ public class MessageTrigger : MonoBehaviour
     {
         if(textAlpha != desiredTextAlpha)
         {
-            Debug.Log(textAlpha + "/" + desiredTextAlpha);
+            //Debug.Log(textAlpha + "/" + desiredTextAlpha);
 
             textAlpha = Mathf.MoveTowards(textAlpha, desiredTextAlpha, 10 * Time.deltaTime);
             messageContainer.color = new Color(1, 1, 1, textAlpha);
